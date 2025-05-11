@@ -1,10 +1,5 @@
 package com.capstone.presentation.view.signIn
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.viewModels
 import com.capstone.domain.model.RegisterInfo
@@ -12,7 +7,9 @@ import com.capstone.presentation.R
 import com.capstone.presentation.base.BaseFragment
 import com.capstone.presentation.databinding.FragmentSignUpCompleteBinding
 import com.capstone.presentation.util.UiState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>() {
 
     private val viewModel: LoginViewModel by viewModels()
