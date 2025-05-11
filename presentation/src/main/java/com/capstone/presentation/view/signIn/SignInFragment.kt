@@ -49,7 +49,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
     private fun moveToNext(route: NavigationRoutes){
         lifecycleScope.launch {
             navigationManager.navigate(
-                NavigationCommand.ToRouteAndClear(route)
+                NavigationCommand.ToRoute(route)
             )
         }
     }

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.capstone.moneypt.databinding.ActivityMainBinding
 import com.capstone.navigation.AppNavigatorImpl
 import com.capstone.navigation.NavigationManager
+import com.capstone.util.LoggerUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,12 +38,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        navigationManager = NavigationManager()
         val navigator = AppNavigatorImpl(navController)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 navigationManager.command.collect { command ->
+                    LoggerUtil.d("네비게이션 확인용")
                     navigator.navigate(command)
                 }
             }

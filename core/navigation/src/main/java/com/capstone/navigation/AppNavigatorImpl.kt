@@ -5,6 +5,7 @@ import androidx.navigation.navOptions
 import com.capstone.navigation.NavigationCommand
 import com.capstone.navigation.Navigator
 import com.capstone.navigation.extension.printBackStack
+import com.capstone.util.LoggerUtil
 import javax.inject.Inject
 
 class AppNavigatorImpl @Inject constructor(
@@ -12,6 +13,7 @@ class AppNavigatorImpl @Inject constructor(
 ) : Navigator {
 
     override fun navigate(command: NavigationCommand) {
+        LoggerUtil.d("Navigation ToRoute")
         when (command) {
             is NavigationCommand.ToRoute -> {
                 navController.navigate(
