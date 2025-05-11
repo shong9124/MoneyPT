@@ -2,7 +2,7 @@
 <resources>
     <style name="OptionTextView">
         <item name="android:layout_marginHorizontal">30dp</item>
-        <item name="android:font">ibm_plex_h1</item>
+<!--        <item name="android:font">ibm_plex_h1</item>-->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/selector_option</item>
