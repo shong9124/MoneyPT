@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.signIn.QuestionFragment">
+
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:alpha="0.07"
+        android:background="@drawable/ic_logo"
+        android:backgroundTint="@color/primary"
+        android:contentDescription="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 질문 텍스트 -->
+    <TextView
+        android:id="@+id/tv_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="질문이 여기에 들어갑니다"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_option1"
+        app:layout_constraintVertical_chainStyle="packed"
+        style="@style/ibm_plex_h1" />
+
+    <!-- 선지들 -->
+    <TextView
+        android:id="@+id/tv_option1"
+        style="@style/OptionTextView"
+        android:layout_marginTop="50dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_question"
+        app:layout_constraintBottom_toTopOf="@+id/tv_option2"/>
+
+    <TextView
+        android:id="@+id/tv_option2"
+        style="@style/OptionTextView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_option1"
+        app:layout_constraintBottom_toTopOf="@+id/tv_option3"/>
+
+    <TextView
+        android:id="@+id/tv_option3"
+        style="@style/OptionTextView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_option2"
+        app:layout_constraintBottom_toTopOf="@+id/tv_option4"/>
+
+    <TextView
+        android:id="@+id/tv_option4"
+        style="@style/OptionTextView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_option3"
+        app:layout_constraintBottom_toTopOf="@+id/tv_option5"/>
+
+    <TextView
+        android:id="@+id/tv_option5"
+        style="@style/OptionTextView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_option4"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_to_sign_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다음"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_login"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
