@@ -42,8 +42,8 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch {
             signUpUseCase.invoke(email, password)
-                .onSuccess { _loginState.value = UiState.Success(it) }
-                .onFailure { _loginState.value = UiState.Error(it.message.toString()) }
+                .onSuccess { _signUpState.value = UiState.Success(it) }
+                .onFailure { _signUpState.value = UiState.Error(it.message.toString()) }
         }
     }
 
@@ -52,8 +52,8 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch {
             signUpCompleteUseCase.invoke(info)
-                .onSuccess { _loginState.value = UiState.Success(it) }
-                .onFailure { _loginState.value = UiState.Error(it.message.toString()) }
+                .onSuccess { _signUpCompleteState.value = UiState.Success(info) }
+                .onFailure { _signUpCompleteState.value = UiState.Error(it.message.toString()) }
         }
     }
 }

@@ -32,6 +32,7 @@
         android:id="@+id/signUpCompleteFragment"
         android:name="com.capstone.presentation.view.signIn.SignUpCompleteFragment"
         android:label="fragment_sign_up_complete"
+        app:route="sign_up_complete"
         tools:layout="@layout/fragment_sign_up_complete" >
         <action
             android:id="@+id/action_signUpCompleteFragment_to_questionFragment"
@@ -41,6 +42,7 @@
         android:id="@+id/questionFragment"
         android:name="com.capstone.presentation.view.signIn.QuestionFragment"
         android:label="fragment_question"
+        app:route="question"
         tools:layout="@layout/fragment_question" />
     <fragment
         android:id="@+id/recommendFinancialItemFragment"
