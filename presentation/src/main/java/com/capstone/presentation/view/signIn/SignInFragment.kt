@@ -37,7 +37,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
                 is UiState.Loading -> {}
                 is UiState.Success -> {
                     // 넘어갈 화면 입력
-//                    moveToNext()
+                    val route = NavigationRoutes.RecommendFinancailItem
+                    moveToNext(route)
                 }
                 is UiState.Error -> {
                     showToast("로그인에 실패했습니다.")
