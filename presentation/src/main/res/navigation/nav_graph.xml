@@ -48,6 +48,7 @@
         android:id="@+id/recommendFinancialItemFragment"
         android:name="com.capstone.presentation.view.recommend.RecommendFinancialItemFragment"
         android:label="fragment_recommend_financial_item"
+        app:route="recommend_financial_item"
         tools:layout="@layout/fragment_recommend_financial_item" />
     <fragment
         android:id="@+id/myPageFragment"

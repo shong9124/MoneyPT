@@ -1,6 +1,7 @@
 package com.capstone.data.di
 
 import com.capstone.data.service.AuthService
+import com.capstone.data.service.PropensityService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +16,10 @@ internal class ServiceModule {
     fun providesAuthService(
         client: Retrofit
     ): AuthService = client.create(AuthService::class.java)
+
+    @Provides
+    fun providesPropensityService(
+        client: Retrofit
+    ): PropensityService = client.create(PropensityService::class.java)
 
 }

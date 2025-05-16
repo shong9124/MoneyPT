@@ -2,13 +2,17 @@ package com.capstone.presentation.view.signIn
 
 import android.widget.CompoundButton
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.RegisterInfo
+import com.capstone.navigation.NavigationCommand
+import com.capstone.navigation.NavigationRoutes
 import com.capstone.presentation.R
 import com.capstone.presentation.base.BaseFragment
 import com.capstone.presentation.databinding.FragmentSignUpCompleteBinding
 import com.capstone.presentation.util.UiState
 import com.capstone.util.LoggerUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -108,12 +112,21 @@ class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>() {
                 is UiState.Loading -> {}
                 is UiState.Success -> {
                     LoggerUtil.d("회원가입 완료 성공")
-                    // moveToNext()
+                    val route = NavigationRoutes.Question
+                    moveToNext(route)
                 }
                 is UiState.Error -> {
                     showToast("회원가입 완료에 실패했습니다.")
                 }
             }
+        }
+    }
+
+    private fun moveToNext(route: NavigationRoutes) {
+        lifecycleScope.launch {
+            navigationManager.navigate(
+                NavigationCommand.ToRoute(route)
+            )
         }
     }
 }
