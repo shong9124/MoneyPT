@@ -1,8 +1,10 @@
 package com.capstone.data.di
 
 import com.capstone.data.repository.AuthRepositoryImpl
+import com.capstone.data.repository.ChatBotRepositoryImpl
 import com.capstone.data.repository.PropensityRepositoryImpl
 import com.capstone.domain.repository.AuthRepository
+import com.capstone.domain.repository.ChatBotRepository
 import com.capstone.domain.repository.PropensityRepository
 import dagger.Binds
 import dagger.Module
@@ -21,5 +23,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsPropensityRepository(impl: PropensityRepositoryImpl) : PropensityRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsChatBotRepository(impl: ChatBotRepositoryImpl) : ChatBotRepository
 
 }
