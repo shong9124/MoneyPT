@@ -6,6 +6,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.chatBot.ChatBotFragment">
 
+    <Toolbar
+        android:id="@+id/tool_bar_chat_bot"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/shape_tool_bar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/primary"
+            android:translationZ="10dp"
+            android:layout_gravity="center"
+            style="@style/ibm_plex_h1"
+            tools:text="챗봇" />
+
+    </Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_chat"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_chat_bot"
+        app:layout_constraintBottom_toTopOf="@id/layout_chat_input"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_chat_user" />
+
+    <!-- ✅ 채팅 입력창과 버튼 -->
+    <LinearLayout
+        android:id="@+id/layout_chat_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/et_chat_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="메시지를 입력하세요"
+            android:textColor="@color/primary"
+            android:background="@drawable/shape_edit_text"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/ic_send_disable"
+            android:enabled="false"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
     <include
         android:id="@+id/bottom_nav"
         layout="@layout/view_bottom_nav"
