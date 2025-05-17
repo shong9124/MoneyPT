@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.capstone.domain.model.UserSurveyResult
 import com.capstone.domain.usecase.PropensityUseCase
 import com.capstone.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ class PropensityViewModel @Inject constructor(
 
     val propensityState: LiveData<UiState<Boolean>> get() = _propensityState
 
-    fun sendQuestionResult(userSurveyResult: String) {
+    fun sendQuestionResult(userSurveyResult: UserSurveyResult) {
         _propensityState.value = UiState.Loading
 
         viewModelScope.launch {

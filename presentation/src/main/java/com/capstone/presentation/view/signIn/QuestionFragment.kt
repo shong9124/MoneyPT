@@ -1,13 +1,19 @@
 package com.capstone.presentation.view.signIn
 
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.FinancialType
+import com.capstone.domain.model.UserSurveyResult
+import com.capstone.navigation.NavigationCommand
 import com.capstone.navigation.NavigationRoutes
 import com.capstone.presentation.base.BaseFragment
 import com.capstone.presentation.databinding.FragmentQuestionBinding
 import com.capstone.presentation.util.UiState
 import com.capstone.util.LoggerUtil
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
     private val viewModel: PropensityViewModel by viewModels()
@@ -172,30 +178,31 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
                 val resultString = buildResultString()
                 showToast("모든 질문을 완료했습니다.\n결과:\n$resultString")
 
-                LoggerUtil.d("$resultString")
+                LoggerUtil.d(resultString)
 
                 // TODO: postSurveyResult(resultString) 함수 추가 시 호출
+                viewModel.sendQuestionResult(UserSurveyResult(resultString))
             }
         }
     }
-//
-//    override fun setObserver() {
-//        super.setObserver()
-//
-//        viewModel.propensityState.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is UiState.Loading -> {}
-//                is UiState.Success -> {
-//                    showToast("금융 성향 분석에 성공했습니다.")
-////                    val route = NavigationRoutes.SignUpComplete
-////                    moveToNext(route)
-//                }
-//                is UiState.Error -> {
-//                    showToast("회원가입에 실패했습니다.")
-//                }
-//            }
-//        }
-//    }
+
+    override fun setObserver() {
+        super.setObserver()
+
+        viewModel.propensityState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Loading -> {}
+                is UiState.Success -> {
+                    showToast("금융 성향 분석에 성공했습니다.")
+                    val route = NavigationRoutes.RecommendFinancailItem
+                    moveToNext(route)
+                }
+                is UiState.Error -> {
+                    showToast("금융 성향 분석에 실패했습니다.")
+                }
+            }
+        }
+    }
 
     private fun showQuestion(index: Int) {
         val question = questionList[index]
@@ -240,7 +247,15 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
                 FinancialType.CONSUMPTIVE -> "소비형"
                 FinancialType.FUSION -> "융합형"
             }
-            "$label: ${it.value.toInt()}"
+            "$label: ${it.value}"
+        }
+    }
+
+    private fun moveToNext(route: NavigationRoutes) {
+        lifecycleScope.launch {
+            navigationManager.navigate(
+                NavigationCommand.ToRoute(route)
+            )
         }
     }
 

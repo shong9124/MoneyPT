@@ -1,5 +1,6 @@
 package com.capstone.data.repository
 
+import com.capstone.data.mapper.toRequestDTO
 import com.capstone.data.remote.PropensityRemoteDataSource
 import com.capstone.domain.model.UserSurveyResult
 import com.capstone.domain.repository.PropensityRepository
@@ -10,8 +11,8 @@ class PropensityRepositoryImpl @Inject constructor(
 ) : PropensityRepository {
     override suspend fun sendQuestionResult(userSurveyResult: UserSurveyResult): Result<Boolean> {
         return try {
-            // 여기서 typeMissMatch 발생
-            val response = dataSource.sendQuestionResult(userSurveyResult)
+            val dto = userSurveyResult.toRequestDTO // ✅ 괄호 없이 사용
+            val response = dataSource.sendQuestionResult(dto)
             if (response.isSuccessful) {
                 Result.success(true)
             } else {
