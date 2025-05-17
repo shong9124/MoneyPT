@@ -53,10 +53,38 @@
         android:name="com.capstone.presentation.view.recommend.RecommendFinancialItemFragment"
         android:label="fragment_recommend_financial_item"
         app:route="recommend_financial_item"
-        tools:layout="@layout/fragment_recommend_financial_item" />
+        tools:layout="@layout/fragment_recommend_financial_item" >
+        <action
+            android:id="@+id/action_recommendFinancialItemFragment_to_chatBotFragment"
+            app:destination="@id/chatBotFragment" />
+        <action
+            android:id="@+id/action_recommendFinancialItemFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.capstone.presentation.view.myPage.MyPageFragment"
         android:label="fragment_my_page"
-        tools:layout="@layout/fragment_my_page" />
+        app:route="my_page"
+        tools:layout="@layout/fragment_my_page" >
+        <action
+            android:id="@+id/action_myPageFragment_to_chatBotFragment"
+            app:destination="@id/chatBotFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_recommendFinancialItemFragment"
+            app:destination="@id/recommendFinancialItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatBotFragment"
+        android:name="com.capstone.presentation.view.chatBot.ChatBotFragment"
+        android:label="fragment_chat_bot"
+        app:route="chat_bot"
+        tools:layout="@layout/fragment_chat_bot" >
+        <action
+            android:id="@+id/action_chatBotFragment_to_recommendFinancialItemFragment"
+            app:destination="@id/recommendFinancialItemFragment" />
+        <action
+            android:id="@+id/action_chatBotFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
 </navigation>

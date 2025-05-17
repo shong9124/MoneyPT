@@ -4,12 +4,26 @@ import android.app.AlertDialog
 import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.capstone.navigation.NavigationCommand
+import com.capstone.navigation.NavigationRoutes
+import com.capstone.presentation.R
 import com.capstone.presentation.base.BaseFragment
 import com.capstone.presentation.databinding.FragmentMyPageBinding
 import com.capstone.util.LoggerUtil
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
+
+    private var timeJob: Job? = null
+
     override fun initView() {
+
+        setBottomNav()
 
         binding.btnEditAsset.setOnClickListener {
             val editAsset = EditText(requireContext()).apply {
@@ -66,7 +80,29 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
                 .setNegativeButton("취소", null)
                 .show()
         }
-
-
     }
+
+    private fun setBottomNav(){
+        binding.bottomNav.ivMyPage.setImageResource(R.drawable.ic_my_page_able)
+        binding.bottomNav.tvMyPage.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary))
+
+        binding.bottomNav.menuRecommend.setOnClickListener {
+            timeJob?.cancel()
+            lifecycleScope.launch {
+                navigationManager.navigate(
+                    NavigationCommand.ToRoute(NavigationRoutes.RecommendFinancailItem)
+                )
+            }
+        }
+
+        binding.bottomNav.menuChat.setOnClickListener {
+            timeJob?.cancel()
+            lifecycleScope.launch {
+                navigationManager.navigate(
+                    NavigationCommand.ToRoute(NavigationRoutes.ChatBot)
+                )
+            }
+        }
+    }
+
 }
