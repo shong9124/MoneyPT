@@ -31,5 +31,7 @@ class MySharedPreferences(
 
     companion object {
         const val KEY_ACCESS_TOKEN = "accessToken"
+        const val CURSOR = "cursor"
+        const val SUMMARY = "summary"
     }
 }

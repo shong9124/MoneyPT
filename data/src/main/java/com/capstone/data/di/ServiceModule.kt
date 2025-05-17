@@ -1,6 +1,7 @@
 package com.capstone.data.di
 
 import com.capstone.data.service.AuthService
+import com.capstone.data.service.ChatBotService
 import com.capstone.data.service.PropensityService
 import dagger.Module
 import dagger.Provides
@@ -21,5 +22,10 @@ internal class ServiceModule {
     fun providesPropensityService(
         client: Retrofit
     ): PropensityService = client.create(PropensityService::class.java)
+
+    @Provides
+    fun providesChatService(
+        client: Retrofit
+    ): ChatBotService = client.create(ChatBotService::class.java)
 
 }

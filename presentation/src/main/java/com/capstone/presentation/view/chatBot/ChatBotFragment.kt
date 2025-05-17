@@ -28,11 +28,18 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
         chatAdapter = ChatAdapter(messages)
         binding.rvChat.adapter = chatAdapter
 
+        // ✅ 화면 진입 시 챗봇 초기 메시지
+        addInitialBotMessages()
+
         // ✅ 텍스트 입력 감지하여 버튼 활성/비활성
         binding.etChatInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 binding.btnSend.isEnabled = !s.isNullOrBlank()
                 binding.btnSend.setBackgroundResource(R.drawable.ic_send_able)
+
+                if (binding.etChatInput.text.toString() == "") {
+                    binding.btnSend.setBackgroundResource(R.drawable.ic_send_disable)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -54,6 +61,19 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
         }
 
     }
+
+    private fun addInitialBotMessages() {
+        val welcomeMessage = """
+        안녕하세요! 금융 상품 추천 챗봇입니다 😊
+        간단한 질문에 답해주시면 맞춤 상품을 추천해드릴게요!
+        아래 입력창에 원하는 정보를 자유롭게 입력해보세요.
+    """.trimIndent()
+
+        messages.add(ChatMessage(welcomeMessage, isUser = false))
+        chatAdapter.notifyItemInserted(messages.size - 1)
+        binding.rvChat.scrollToPosition(messages.size - 1)
+    }
+
 
     private fun setBottomNav(){
         binding.bottomNav.ivChat.setImageResource(R.drawable.ic_chat_able)
