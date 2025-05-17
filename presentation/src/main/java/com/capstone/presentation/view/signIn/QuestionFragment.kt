@@ -176,7 +176,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
             } else {
                 // 최종 점수 문자열 생성
                 val resultString = buildResultString()
-                showToast("모든 질문을 완료했습니다.\n결과:\n$resultString")
 
                 LoggerUtil.d(resultString)
 
@@ -193,7 +192,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
             when (it) {
                 is UiState.Loading -> {}
                 is UiState.Success -> {
-                    showToast("금융 성향 분석에 성공했습니다.")
                     val route = NavigationRoutes.RecommendFinancailItem
                     moveToNext(route)
                 }

@@ -23,6 +23,7 @@
     <TextView
         android:id="@+id/tv_question"
         android:layout_width="wrap_content"
+        android:maxWidth="360dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="질문이 여기에 들어갑니다"
