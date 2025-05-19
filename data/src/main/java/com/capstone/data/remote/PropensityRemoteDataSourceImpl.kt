@@ -1,7 +1,7 @@
 package com.capstone.data.remote
 
-import com.capstone.data.model.UserSurveyResultRequestDTO
-import com.capstone.data.model.UserSurveyResultResponseDTO
+import com.capstone.data.model.signUp.UserSurveyResultRequestDTO
+import com.capstone.data.model.signUp.UserSurveyResultResponseDTO
 import com.capstone.data.service.PropensityService
 import com.capstone.data.util.MySharedPreferences
 import com.capstone.data.util.MySharedPreferences.Companion.KEY_ACCESS_TOKEN

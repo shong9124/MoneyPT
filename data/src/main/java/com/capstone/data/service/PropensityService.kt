@@ -1,7 +1,7 @@
 package com.capstone.data.service
 
-import com.capstone.data.model.UserSurveyResultRequestDTO
-import com.capstone.data.model.UserSurveyResultResponseDTO
+import com.capstone.data.model.signUp.UserSurveyResultRequestDTO
+import com.capstone.data.model.signUp.UserSurveyResultResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header

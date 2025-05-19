@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.domain.model.RegisterInfo
-import com.capstone.domain.usecase.LoginUseCase
-import com.capstone.domain.usecase.SignUpCompleteUseCase
-import com.capstone.domain.usecase.SignUpUseCase
+import com.capstone.domain.usecase.signUp.LoginUseCase
+import com.capstone.domain.usecase.signUp.SignUpCompleteUseCase
+import com.capstone.domain.usecase.signUp.SignUpUseCase
 import com.capstone.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

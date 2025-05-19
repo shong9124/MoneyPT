@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.domain.model.UserSurveyResult
-import com.capstone.domain.usecase.PropensityUseCase
+import com.capstone.domain.usecase.signUp.PropensityUseCase
 import com.capstone.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

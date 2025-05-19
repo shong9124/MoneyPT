@@ -100,40 +100,22 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
                 is UiState.Loading -> {
                     // 로딩 상태 처리 (필요 시)
                 }
+
                 is UiState.Success -> {
-                    // 서버에서 저장된 summary 불러오기
-                    val summary = sharedPreferences.getString(MySharedPreferences.SUMMARY, "")
-                    messages.add(ChatMessage(summary, isUser = false))
+                    // 🔵 responseMessage만 화면에 출력
+                    val botResponse = state.data.responseMessage
+                    messages.add(ChatMessage(botResponse, isUser = false))
                     chatAdapter.notifyItemInserted(messages.size - 1)
                     binding.rvChat.scrollToPosition(messages.size - 1)
                 }
+
                 is UiState.Error -> {
                     showToast("챗봇 응답 실패: ${state.message}")
                 }
             }
         }
-
-
-        viewModel.sendChatState.observe(viewLifecycleOwner) {
-            when (it) {
-                is UiState.Loading -> {}
-                is UiState.Success -> {
-                    // 🟢 응답 메시지 채팅창에 추가
-                    val botResponse = it.data.responseMessage // 실제 필드명에 맞게 수정
-                    messages.add(ChatMessage(botResponse, isUser = false))
-                    chatAdapter.notifyItemInserted(messages.size - 1)
-                    binding.rvChat.scrollToPosition(messages.size - 1)
-
-                    // 입력창 비우기
-                    binding.etChatInput.text.clear()
-                }
-                is UiState.Error -> {
-                    showToast("메시지 전송 중 오류 발생: ${it.message}")
-                }
-            }
-        }
-
     }
+
 
     private fun setBottomNav(){
         binding.bottomNav.ivChat.setImageResource(R.drawable.ic_chat_able)

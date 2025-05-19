@@ -1,4 +1,4 @@
-package com.capstone.domain.usecase
+package com.capstone.domain.usecase.signUp
 
 import com.capstone.domain.repository.AuthRepository
 import javax.inject.Inject

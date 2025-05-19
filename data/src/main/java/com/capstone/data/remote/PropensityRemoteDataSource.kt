@@ -1,7 +1,7 @@
 package com.capstone.data.remote
 
-import com.capstone.data.model.UserSurveyResultRequestDTO
-import com.capstone.data.model.UserSurveyResultResponseDTO
+import com.capstone.data.model.signUp.UserSurveyResultRequestDTO
+import com.capstone.data.model.signUp.UserSurveyResultResponseDTO
 import retrofit2.Response
 
 interface PropensityRemoteDataSource {

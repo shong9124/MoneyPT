@@ -1,8 +1,8 @@
 package com.capstone.data.remote
 
-import com.capstone.data.model.SignUpCompleteRequestDTO
-import com.capstone.data.model.SignUpRequestDTO
-import com.capstone.data.model.SignUpResponseDTO
+import com.capstone.data.model.signUp.SignUpCompleteRequestDTO
+import com.capstone.data.model.signUp.SignUpRequestDTO
+import com.capstone.data.model.signUp.SignUpResponseDTO
 import com.capstone.data.service.AuthService
 import com.capstone.data.util.MySharedPreferences
 import com.capstone.data.util.MySharedPreferences.Companion.KEY_ACCESS_TOKEN

@@ -1,4 +1,4 @@
-package com.capstone.data.model
+package com.capstone.data.model.signUp
 import com.google.gson.annotations.SerializedName
 
 data class SignUpCompleteRequestDTO(

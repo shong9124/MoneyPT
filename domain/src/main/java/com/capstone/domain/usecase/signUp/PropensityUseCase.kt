@@ -1,4 +1,4 @@
-package com.capstone.domain.usecase
+package com.capstone.domain.usecase.signUp
 
 import com.capstone.domain.model.UserSurveyResult
 import com.capstone.domain.repository.PropensityRepository

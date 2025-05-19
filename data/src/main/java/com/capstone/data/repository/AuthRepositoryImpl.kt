@@ -1,7 +1,7 @@
 package com.capstone.data.repository
 
-import com.capstone.data.model.SignUpCompleteRequestDTO
-import com.capstone.data.model.SignUpRequestDTO
+import com.capstone.data.model.signUp.SignUpCompleteRequestDTO
+import com.capstone.data.model.signUp.SignUpRequestDTO
 import com.capstone.data.remote.AuthRemoteDataSource
 import com.capstone.domain.model.RegisterInfo
 import com.capstone.domain.repository.AuthRepository
