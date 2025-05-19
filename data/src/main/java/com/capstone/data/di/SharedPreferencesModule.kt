@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class SharedPreferencesModule {
+class SharedPreferencesModule {
     @Provides
     fun provideSharedPreference(
         @ApplicationContext context: Context

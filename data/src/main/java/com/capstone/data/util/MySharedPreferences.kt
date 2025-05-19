@@ -3,9 +3,10 @@ package com.capstone.data.util
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class MySharedPreferences(
-    context: Context
+class MySharedPreferences @Inject constructor(
+    @ApplicationContext context: Context
 ) {
     private val prefsFileName = "prefs"
     private val prefs: SharedPreferences =
