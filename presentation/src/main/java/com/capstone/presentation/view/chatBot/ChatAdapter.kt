@@ -3,9 +3,11 @@ package com.capstone.presentation.view.chatBot
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.presentation.R
+import com.capstone.util.LoggerUtil
 
 class ChatAdapter(private val messages: List<ChatMessage>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -31,11 +33,22 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val message = messages[position].message
-        if (holder is UserViewHolder) {
-            holder.bind(message)
-        } else if (holder is BotViewHolder) {
-            holder.bind(message)
+        val chat = messages[position]
+        LoggerUtil.d("🪵 바인딩 [$position]: $chat")
+
+        if (!chat.isUser) {
+            val botHolder = holder as BotViewHolder
+            if (chat.isLoading) {
+                botHolder.progressBar.visibility = View.VISIBLE
+                botHolder.tvMessage.visibility = View.GONE
+            } else {
+                botHolder.progressBar.visibility = View.GONE
+                botHolder.tvMessage.visibility = View.VISIBLE
+                botHolder.tvMessage.text = chat.message
+            }
+        } else {
+            val userHolder = holder as UserViewHolder
+            userHolder.bind(chat.message)
         }
     }
 
@@ -49,9 +62,18 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
     }
 
     class BotViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvMessage: TextView = itemView.findViewById(R.id.tv_message)
-        fun bind(message: String) {
-            tvMessage.text = message
+        val tvMessage: TextView = itemView.findViewById(R.id.tv_message)
+        val progressBar: ProgressBar = itemView.findViewById(R.id.progress_loading)
+
+        fun bind(chatMessage: ChatMessage) {
+            if (chatMessage.isLoading) {
+                progressBar.visibility = View.VISIBLE
+                tvMessage.visibility = View.GONE
+            } else {
+                progressBar.visibility = View.GONE
+                tvMessage.visibility = View.VISIBLE
+                tvMessage.text = chatMessage.message
+            }
         }
     }
 }

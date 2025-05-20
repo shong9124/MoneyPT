@@ -5,6 +5,15 @@
     android:padding="8dp"
     android:orientation="horizontal">
 
+    <!-- 로딩 아이콘 -->
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:indeterminateDrawable="@drawable/ic_loading"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/tv_message"
         android:layout_width="wrap_content"

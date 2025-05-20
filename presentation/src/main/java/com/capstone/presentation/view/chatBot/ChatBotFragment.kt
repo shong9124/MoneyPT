@@ -5,6 +5,7 @@ import android.text.TextWatcher
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager // 수정 부분
 import com.capstone.data.util.MySharedPreferences
 import com.capstone.domain.model.chat.PostMessage
 import com.capstone.navigation.NavigationCommand
@@ -39,7 +40,7 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
         chatAdapter = ChatAdapter(messages)
         binding.rvChat.adapter = chatAdapter
 
-        // ✅ 텍스트 입력 감지하여 버튼 활성/비활성
+        // 텍스트 입력 감지하여 버튼 활성/비활성
         binding.etChatInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 binding.btnSend.isEnabled = !s.isNullOrBlank()
@@ -54,7 +55,7 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        // ✅ 전송 버튼 클릭 시 메시지 추가
+        // 전송 버튼 클릭 시 메시지 추가
         binding.btnSend.setOnClickListener {
             val userMessage = binding.etChatInput.text.toString()
             if (userMessage.isNotBlank()) {
@@ -75,8 +76,6 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
                 binding.etChatInput.text.clear()
             }
         }
-
-
     }
 
     private fun addInitialBotMessages() {
@@ -94,33 +93,34 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
     override fun setObserver() {
         super.setObserver()
 
-        // 🟢 채팅 목록 받아오기
+        // 채팅 목록 가져오기
         viewModel.getChatListState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Loading -> {
-                    // 로딩 처리 필요 시 작성
+                    // 필요 시 로딩 UI 처리
                 }
-
                 is UiState.Success -> {
-                    val chatList = state.data
+                    // 🔧 모든 메시지 초기화 (로딩 메시지 제거 목적)
+                    messages.clear()
+                    chatAdapter.notifyDataSetChanged()
 
+                    val chatList = state.data
                     if (chatList.isNullOrEmpty()) {
-                        // 🟠 받아온 채팅이 없다면 초기 메시지 표시
                         addInitialBotMessages()
                     } else {
-                        // 🟢 받아온 채팅 메시지들을 추가
-                        chatList.forEach { chat ->
+                        // ⚠️ 여기서 chatList를 역순으로 처리해서 오래된 메시지가 먼저 오도록
+                        chatList.asReversed().forEach { chat ->
                             messages.add(ChatMessage(chat.requestMessage, isUser = true))
                             messages.add(ChatMessage(chat.responseMessage, isUser = false))
                         }
                         chatAdapter.notifyDataSetChanged()
+                        // 최신 메시지가 맨 아래이므로 마지막 위치로 스크롤
                         binding.rvChat.scrollToPosition(messages.size - 1)
                     }
                 }
-
                 is UiState.Error -> {
                     showToast("채팅 불러오기 실패: ${state.message}")
-                    addInitialBotMessages() // 실패했을 경우도 초기 메시지 보여주기
+                    addInitialBotMessages()
                 }
             }
         }
@@ -128,11 +128,24 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
         viewModel.sendChatState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Loading -> {
-                    // 로딩 상태 처리 (필요 시)
+                    // 중복된 로딩 메시지 추가 방지
+                    val hasLoading = messages.any { it.isLoading }
+                    if (!hasLoading) {
+                        messages.add(ChatMessage(message = "", isUser = false, isLoading = true))
+                        chatAdapter.notifyItemInserted(messages.size - 1)
+                        binding.rvChat.scrollToPosition(messages.size - 1)
+                    }
                 }
 
                 is UiState.Success -> {
-                    // 🔵 responseMessage만 화면에 출력
+                    // 마지막 메시지가 로딩이면 제거
+                    if (messages.isNotEmpty() && messages.last().isLoading) {
+                        val lastIndex = messages.size - 1
+                        messages.removeAt(lastIndex)
+                        chatAdapter.notifyItemRemoved(lastIndex)
+                    }
+
+                    // 봇 응답 메시지 추가
                     val botResponse = state.data.responseMessage
                     messages.add(ChatMessage(botResponse, isUser = false))
                     chatAdapter.notifyItemInserted(messages.size - 1)
@@ -140,6 +153,13 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
                 }
 
                 is UiState.Error -> {
+                    // 마지막 메시지가 로딩이면 제거
+                    if (messages.isNotEmpty() && messages.last().isLoading) {
+                        val lastIndex = messages.size - 1
+                        messages.removeAt(lastIndex)
+                        chatAdapter.notifyItemRemoved(lastIndex)
+                    }
+
                     showToast("챗봇 응답 실패: ${state.message}")
                 }
             }
