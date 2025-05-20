@@ -34,11 +34,10 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
 
         setBottomNav()
 
+        viewModel.getChatList(3)
+
         chatAdapter = ChatAdapter(messages)
         binding.rvChat.adapter = chatAdapter
-
-        // ✅ 화면 진입 시 챗봇 초기 메시지
-        addInitialBotMessages()
 
         // ✅ 텍스트 입력 감지하여 버튼 활성/비활성
         binding.etChatInput.addTextChangedListener(object : TextWatcher {
@@ -94,6 +93,37 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
 
     override fun setObserver() {
         super.setObserver()
+
+        // 🟢 채팅 목록 받아오기
+        viewModel.getChatListState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
+                    // 로딩 처리 필요 시 작성
+                }
+
+                is UiState.Success -> {
+                    val chatList = state.data
+
+                    if (chatList.isNullOrEmpty()) {
+                        // 🟠 받아온 채팅이 없다면 초기 메시지 표시
+                        addInitialBotMessages()
+                    } else {
+                        // 🟢 받아온 채팅 메시지들을 추가
+                        chatList.forEach { chat ->
+                            messages.add(ChatMessage(chat.requestMessage, isUser = true))
+                            messages.add(ChatMessage(chat.responseMessage, isUser = false))
+                        }
+                        chatAdapter.notifyDataSetChanged()
+                        binding.rvChat.scrollToPosition(messages.size - 1)
+                    }
+                }
+
+                is UiState.Error -> {
+                    showToast("채팅 불러오기 실패: ${state.message}")
+                    addInitialBotMessages() // 실패했을 경우도 초기 메시지 보여주기
+                }
+            }
+        }
 
         viewModel.sendChatState.observe(viewLifecycleOwner) { state ->
             when (state) {
