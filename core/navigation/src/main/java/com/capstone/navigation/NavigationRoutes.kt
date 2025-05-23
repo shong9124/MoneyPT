@@ -8,4 +8,8 @@ sealed class NavigationRoutes(val route: String) {
     data object RecommendFinancailItem : NavigationRoutes("recommend_financial_item")
     data object ChatBot : NavigationRoutes("chat_bot")
     data object MyPage : NavigationRoutes("my_page")
+    data object FinancialItem : NavigationRoutes("financial_item")
+    data object RecommendCard : NavigationRoutes("recommend_card")
+    data object ItemList : NavigationRoutes("item_list")
+    data object FinancialItemResult : NavigationRoutes("financial_item_result")
 }

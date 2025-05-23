@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start"
+    android:padding="8dp"
+    android:orientation="horizontal">
+
+    <!-- 로딩 아이콘 -->
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:indeterminateDrawable="@drawable/ic_loading"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:maxWidth="336dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_chat_bot"
+        android:textColor="@color/primary"
+        android:padding="12dp"
+        android:text="Recommend Items"
+        android:textSize="14sp"
+        style="@style/ibm_plex_h1"/>
+</LinearLayout>

@@ -20,6 +20,21 @@ class RecommendFinancialItemFragment : BaseFragment<FragmentRecommendFinancialIt
 
         setBottomNav()
 
+        binding.btnItemRecommend.setOnClickListener {
+            val route = NavigationRoutes.FinancialItem
+            moveToNext(route)
+        }
+
+        binding.btnCardRecommend.setOnClickListener {
+            val route = NavigationRoutes.RecommendCard
+            moveToNext(route)
+        }
+
+        binding.btnRecommendedList.setOnClickListener {
+            val route = NavigationRoutes.ItemList
+            moveToNext(route)
+        }
+
     }
 
     private fun setBottomNav(){

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.recommend.FinancialItemResultFragment">
+
+    <TextView
+        android:id="@+id/tool_bar"
+        style="@style/ibm_plex_h1"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center"
+        android:text="금융 상품 추천 결과"
+        android:background="@drawable/shape_tool_bar"
+        android:textColor="@color/primary"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recommend_result"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_chat_user" />
+
+    <Button
+        android:id="@+id/btn_item_result_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="완료"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_login"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

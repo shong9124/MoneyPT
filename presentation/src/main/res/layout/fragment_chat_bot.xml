@@ -22,7 +22,7 @@
             android:translationZ="10dp"
             android:layout_gravity="center"
             style="@style/ibm_plex_h1"
-            tools:text="챗봇" />
+            android:text="챗봇" />
 
     </Toolbar>
 

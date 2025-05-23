@@ -60,6 +60,15 @@
         <action
             android:id="@+id/action_recommendFinancialItemFragment_to_myPageFragment"
             app:destination="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_recommendFinancialItemFragment_to_financialItemFragment"
+            app:destination="@id/financialItemFragment" />
+        <action
+            android:id="@+id/action_recommendFinancialItemFragment_to_recommendCardFragment"
+            app:destination="@id/recommendCardFragment" />
+        <action
+            android:id="@+id/action_recommendFinancialItemFragment_to_itemListFragment"
+            app:destination="@id/itemListFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPageFragment"
@@ -86,5 +95,36 @@
         <action
             android:id="@+id/action_chatBotFragment_to_myPageFragment"
             app:destination="@id/myPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/financialItemFragment"
+        android:name="com.capstone.presentation.view.recommend.FinancialItemFragment"
+        android:label="FinancialItemFragment"
+        app:route="financial_item" >
+        <action
+            android:id="@+id/action_financialItemFragment_to_financialItemResultFragment"
+            app:destination="@id/financialItemResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recommendCardFragment"
+        android:name="com.capstone.presentation.view.recommend.RecommendCardFragment"
+        android:label="fragment_recommend_card"
+        tools:layout="@layout/fragment_recommend_card"
+        app:route="recommend_card"/>
+    <fragment
+        android:id="@+id/itemListFragment"
+        android:name="com.capstone.presentation.view.recommend.ItemListFragment"
+        android:label="fragment_item_list"
+        tools:layout="@layout/fragment_item_list"
+        app:route="item_list"/>
+    <fragment
+        android:id="@+id/financialItemResultFragment"
+        android:name="com.capstone.presentation.view.recommend.FinancialItemResultFragment"
+        android:label="fragment_financial_item_result"
+        tools:layout="@layout/fragment_financial_item_result"
+        app:route="financial_item_result">
+        <action
+            android:id="@+id/action_financialItemResultFragment_to_recommendFinancialItemFragment"
+            app:destination="@id/recommendFinancialItemFragment" />
     </fragment>
 </navigation>
