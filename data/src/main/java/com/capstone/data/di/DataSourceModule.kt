@@ -2,6 +2,8 @@ package com.capstone.data.di
 
 import com.capstone.data.remote.AuthRemoteDataSource
 import com.capstone.data.remote.AuthRemoteDataSourceImpl
+import com.capstone.data.remote.BankProductRemoteDataSource
+import com.capstone.data.remote.BankProductRemoteDataSourceImpl
 import com.capstone.data.remote.ChatBotRemoteDataSource
 import com.capstone.data.remote.ChatBotRemoteDataSourceImpl
 import com.capstone.data.remote.PropensityRemoteDataSource
@@ -33,5 +35,11 @@ abstract class DataSourceModule {
     abstract fun bindChatBotRemoteDataSource(
         chatBotRemoteDataSourceImpl: ChatBotRemoteDataSourceImpl
     ): ChatBotRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindBankProductRemoteDataSource(
+        bankProductRemoteDataSourceImpl: BankProductRemoteDataSourceImpl
+    ): BankProductRemoteDataSource
 
 }
