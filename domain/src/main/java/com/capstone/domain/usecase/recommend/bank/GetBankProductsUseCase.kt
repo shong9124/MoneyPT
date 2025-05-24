@@ -1,5 +1,6 @@
 package com.capstone.domain.usecase.recommend.bank
 
+import com.capstone.domain.model.recommend.bank.GetBankData
 import com.capstone.domain.model.recommend.bank.RecommendationContent
 import com.capstone.domain.repository.BankRecommendRepository
 import javax.inject.Inject
@@ -7,7 +8,7 @@ import javax.inject.Inject
 class GetBankProductsUseCase @Inject constructor(
     private val bankRecommendRepository: BankRecommendRepository
 ){
-    suspend operator fun invoke(page: Int, size: Int): Result<List<RecommendationContent>> {
+    suspend operator fun invoke(page: Int, size: Int): Result<GetBankData> {
         return bankRecommendRepository.getBankProducts(page, size)
     }
 }

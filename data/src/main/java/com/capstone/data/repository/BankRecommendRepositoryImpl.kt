@@ -2,7 +2,9 @@ package com.capstone.data.repository
 
 import com.capstone.data.mapper.toDTO
 import com.capstone.data.mapper.toDomain
+import com.capstone.data.mapper.toGetBankData
 import com.capstone.data.remote.BankProductRemoteDataSource
+import com.capstone.domain.model.recommend.bank.GetBankData
 import com.capstone.domain.model.recommend.bank.PostRecommendation
 import com.capstone.domain.model.recommend.bank.RecommendationContent
 import com.capstone.domain.model.recommend.bank.ResponseRecommendation
@@ -15,20 +17,14 @@ class BankRecommendRepositoryImpl @Inject constructor(
     override suspend fun getBankProducts(
         page: Int,
         size: Int
-    ): Result<List<RecommendationContent>> {
+    ): Result<GetBankData> {
         return try {
             val response = dataSource.getBankProducts(page, size)
 
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body != null) {
-                    Result.success(body.data.content.map {
-                        RecommendationContent(
-                            it.createdAt,
-                            it.id,
-                            it.strategy
-                        )
-                    })
+                    Result.success(body.data.toGetBankData())
                 } else {
                     throw Exception("Body is null")
                 }
