@@ -107,10 +107,14 @@
     </fragment>
     <fragment
         android:id="@+id/recommendCardFragment"
-        android:name="com.capstone.presentation.view.recommend.RecommendCardFragment"
+        android:name="com.capstone.presentation.view.recommend.card.RecommendCardFragment"
         android:label="fragment_recommend_card"
         tools:layout="@layout/fragment_recommend_card"
-        app:route="recommend_card"/>
+        app:route="recommend_card">
+        <action
+            android:id="@+id/action_recommendCardFragment_to_recommendCardListResultFragment3"
+            app:destination="@id/recommendCardListResultFragment3" />
+    </fragment>
     <fragment
         android:id="@+id/itemListFragment"
         android:name="com.capstone.presentation.view.recommend.ItemListFragment"
@@ -127,4 +131,10 @@
             android:id="@+id/action_financialItemResultFragment_to_recommendFinancialItemFragment"
             app:destination="@id/recommendFinancialItemFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/recommendCardListResultFragment3"
+        android:name="com.capstone.presentation.view.recommend.card.RecommendCardListResultFragment"
+        android:label="fragment_recommend_card_list_result"
+        tools:layout="@layout/fragment_recommend_card_list_result"
+        app:route="recommend_card_result"/>
 </navigation>

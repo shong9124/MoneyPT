@@ -12,4 +12,5 @@ sealed class NavigationRoutes(val route: String) {
     data object RecommendCard : NavigationRoutes("recommend_card")
     data object ItemList : NavigationRoutes("item_list")
     data object FinancialItemResult : NavigationRoutes("financial_item_result")
+    data object RecommendCardResult : NavigationRoutes("recommend_card_result")
 }
