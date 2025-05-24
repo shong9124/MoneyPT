@@ -2,14 +2,11 @@ package com.capstone.data.repository
 
 import com.capstone.data.mapper.toDTO
 import com.capstone.data.mapper.toDomain
-import com.capstone.data.mapper.toDomainList
 import com.capstone.data.remote.BankProductRemoteDataSource
-import com.capstone.domain.model.recommend.PostRecommendation
-import com.capstone.domain.model.recommend.RecommendationContent
-import com.capstone.domain.model.recommend.Recommendations
-import com.capstone.domain.model.recommend.ResponseRecommendation
+import com.capstone.domain.model.recommend.bank.PostRecommendation
+import com.capstone.domain.model.recommend.bank.RecommendationContent
+import com.capstone.domain.model.recommend.bank.ResponseRecommendation
 import com.capstone.domain.repository.BankRecommendRepository
-import com.capstone.util.LoggerUtil
 import javax.inject.Inject
 
 class BankRecommendRepositoryImpl @Inject constructor(

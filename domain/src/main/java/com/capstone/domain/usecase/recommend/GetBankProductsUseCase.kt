@@ -1,6 +1,6 @@
 package com.capstone.domain.usecase.recommend
 
-import com.capstone.domain.model.recommend.RecommendationContent
+import com.capstone.domain.model.recommend.bank.RecommendationContent
 import com.capstone.domain.repository.BankRecommendRepository
 import javax.inject.Inject
 

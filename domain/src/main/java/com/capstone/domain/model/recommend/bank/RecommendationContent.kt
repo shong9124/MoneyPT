@@ -1,4 +1,4 @@
-package com.capstone.domain.model.recommend
+package com.capstone.domain.model.recommend.bank
 
 data class RecommendationContent(
     val createdAt: String,

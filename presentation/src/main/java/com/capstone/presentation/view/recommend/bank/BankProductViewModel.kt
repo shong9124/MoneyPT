@@ -1,13 +1,12 @@
-package com.capstone.presentation.view.recommend
+package com.capstone.presentation.view.recommend.bank
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.capstone.domain.model.recommend.PostRecommendation
-import com.capstone.domain.model.recommend.RecommendationContent
-import com.capstone.domain.model.recommend.Recommendations
-import com.capstone.domain.model.recommend.ResponseRecommendation
+import com.capstone.domain.model.recommend.bank.PostRecommendation
+import com.capstone.domain.model.recommend.bank.RecommendationContent
+import com.capstone.domain.model.recommend.bank.ResponseRecommendation
 import com.capstone.domain.usecase.recommend.GetBankProductsUseCase
 import com.capstone.domain.usecase.recommend.GetDetailBankProductsUseCase
 import com.capstone.domain.usecase.recommend.SendBankProductRequestUseCase

@@ -1,4 +1,4 @@
-package com.capstone.presentation.view.recommend
+package com.capstone.presentation.view.recommend.bank
 
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope

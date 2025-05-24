@@ -1,11 +1,11 @@
-package com.capstone.presentation.view.recommend
+package com.capstone.presentation.view.recommend.bank
 
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.capstone.domain.model.recommend.PostRecommendation
+import com.capstone.domain.model.recommend.bank.PostRecommendation
 import com.capstone.navigation.NavigationCommand
 import com.capstone.navigation.NavigationRoutes
 import com.capstone.presentation.R

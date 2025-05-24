@@ -1,4 +1,4 @@
-package com.capstone.presentation.view.recommend
+package com.capstone.presentation.view.recommend.bank
 
 import android.content.Intent
 import android.graphics.Paint
@@ -6,7 +6,7 @@ import android.net.Uri
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.capstone.domain.model.recommend.Recommendations
+import com.capstone.domain.model.recommend.bank.Recommendations
 import com.capstone.presentation.R
 import com.capstone.presentation.databinding.ItemRecommendItemResultBinding
 import android.view.LayoutInflater

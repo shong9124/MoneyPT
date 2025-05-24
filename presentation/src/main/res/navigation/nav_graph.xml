@@ -98,7 +98,7 @@
     </fragment>
     <fragment
         android:id="@+id/financialItemFragment"
-        android:name="com.capstone.presentation.view.recommend.FinancialItemFragment"
+        android:name="com.capstone.presentation.view.recommend.bank.FinancialItemFragment"
         android:label="FinancialItemFragment"
         app:route="financial_item" >
         <action
@@ -119,7 +119,7 @@
         app:route="item_list"/>
     <fragment
         android:id="@+id/financialItemResultFragment"
-        android:name="com.capstone.presentation.view.recommend.FinancialItemResultFragment"
+        android:name="com.capstone.presentation.view.recommend.bank.FinancialItemResultFragment"
         android:label="fragment_financial_item_result"
         tools:layout="@layout/fragment_financial_item_result"
         app:route="financial_item_result">
