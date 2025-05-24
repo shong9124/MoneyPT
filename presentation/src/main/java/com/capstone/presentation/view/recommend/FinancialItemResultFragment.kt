@@ -1,6 +1,6 @@
 package com.capstone.presentation.view.recommend
 
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.navigation.NavigationCommand
@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FinancialItemResultFragment : BaseFragment<FragmentFinancialItemResultBinding>() {
 
-    private val viewModel: BankProductViewModel by viewModels()
+    // viewModel의 결과를 공유하기 위함
+    private val viewModel: BankProductViewModel by activityViewModels()
 
     override fun initView() {
 

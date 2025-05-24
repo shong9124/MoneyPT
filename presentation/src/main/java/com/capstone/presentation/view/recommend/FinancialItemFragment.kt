@@ -3,7 +3,7 @@ package com.capstone.presentation.view.recommend
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.recommend.PostRecommendation
 import com.capstone.navigation.NavigationCommand
@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FinancialItemFragment : BaseFragment<FragmentFinancialItemBinding>() {
 
-    private val viewModel : BankProductViewModel by viewModels()
+    // viewModel의 결과를 공유하기 위함
+    private val viewModel: BankProductViewModel by activityViewModels()
 
     override fun initView() {
         val spinner = binding.spinnerSelectPropensity
@@ -69,7 +70,9 @@ class FinancialItemFragment : BaseFragment<FragmentFinancialItemBinding>() {
 
         viewModel.sendBankProductRequestState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Loading -> {}
+                is UiState.Loading -> {
+                    showToast("로딩중입니다.\n잠시 기다려주세요.")
+                }
                 is UiState.Success -> {
                     val route = NavigationRoutes.FinancialItemResult
                     moveToNext(route)
