@@ -1,4 +1,4 @@
-package com.capstone.domain.usecase.recommend
+package com.capstone.domain.usecase.recommend.bank
 
 import com.capstone.domain.model.recommend.bank.PostRecommendation
 import com.capstone.domain.model.recommend.bank.ResponseRecommendation

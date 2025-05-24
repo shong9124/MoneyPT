@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.capstone.domain.model.recommend.bank.PostRecommendation
 import com.capstone.domain.model.recommend.bank.RecommendationContent
 import com.capstone.domain.model.recommend.bank.ResponseRecommendation
-import com.capstone.domain.usecase.recommend.GetBankProductsUseCase
-import com.capstone.domain.usecase.recommend.GetDetailBankProductsUseCase
-import com.capstone.domain.usecase.recommend.SendBankProductRequestUseCase
+import com.capstone.domain.usecase.recommend.bank.GetBankProductsUseCase
+import com.capstone.domain.usecase.recommend.bank.GetDetailBankProductsUseCase
+import com.capstone.domain.usecase.recommend.bank.SendBankProductRequestUseCase
 import com.capstone.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

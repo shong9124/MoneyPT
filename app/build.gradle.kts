@@ -61,4 +61,8 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.bundles.navigation.bundle)
+
+    // 엑셀 파일 읽어오기
+    implementation (libs.poi.ooxml)
+
 }
