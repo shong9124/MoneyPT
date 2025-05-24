@@ -45,4 +45,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.logger)
+    // 엑셀 파일 읽어오기
+    implementation (libs.poi.ooxml)
 }
