@@ -84,10 +84,10 @@ class FinancialItemFragment : BaseFragment<FragmentFinancialItemBinding>() {
     private fun mapSelectedPropensity(selected: String): String {
         return when (selected) {
             "균형형" -> "BALANCED"
-            "투자형" -> "INVESTMENT"
+            "투자형" -> "INVESTOR"
             "보수형" -> "CONSERVATIVE"
-            "소비형" -> "CONSUMPTIVE"
-            "융합형" -> "FUSION"
+            "소비형" -> "CONSUMER"
+            "융합형" -> "FLEXIBLE"
             else -> "UNKNOWN"
         }
     }

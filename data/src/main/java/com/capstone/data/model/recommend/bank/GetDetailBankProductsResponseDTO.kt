@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GetDetailBankProductsResponseDTO(
     @SerializedName("data")
-    val `data`: GetDetailData,
+    val data: GetDetailData,
     @SerializedName("message")
     val message: String,
     @SerializedName("statusCode")

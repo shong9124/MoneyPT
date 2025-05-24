@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.capstone.domain.model.recommend.PostRecommendation
 import com.capstone.domain.model.recommend.RecommendationContent
+import com.capstone.domain.model.recommend.Recommendations
 import com.capstone.domain.model.recommend.ResponseRecommendation
 import com.capstone.domain.usecase.recommend.GetBankProductsUseCase
 import com.capstone.domain.usecase.recommend.GetDetailBankProductsUseCase
@@ -25,10 +26,13 @@ class BankProductViewModel @Inject constructor(
     private val _getBankProductsState = MutableLiveData<UiState<List<RecommendationContent>>>(UiState.Loading)
     private val _sendBankProductRequestState = MutableLiveData<UiState<ResponseRecommendation>>(UiState.Loading)
     private val _getDetailBankProductsState = MutableLiveData<UiState<ResponseRecommendation>>(UiState.Loading)
+    // ViewModel에 추가
+    private val _recommendationContent = MutableLiveData<ResponseRecommendation>()
 
     val getBankProductsState : LiveData<UiState<List<RecommendationContent>>> get() = _getBankProductsState
     val sendBankProductRequestState : LiveData<UiState<ResponseRecommendation>> get() = _sendBankProductRequestState
     val getDetailBankProductsState : LiveData<UiState<ResponseRecommendation>> get() = _getDetailBankProductsState
+    val recommendationContent: LiveData<ResponseRecommendation> get() = _recommendationContent
 
     fun getBankProducts(page: Int, size: Int) {
         _getBankProductsState.value = UiState.Loading
@@ -45,7 +49,10 @@ class BankProductViewModel @Inject constructor(
 
         viewModelScope.launch{
             sendBankProductRequestUseCase.invoke(postRecommendation)
-                .onSuccess { _sendBankProductRequestState.value = UiState.Success(it) }
+                .onSuccess {
+                    _recommendationContent.value = it
+                    _sendBankProductRequestState.value = UiState.Success(it)
+                }
                 .onFailure { _sendBankProductRequestState.value = UiState.Error(it.message.toString()) }
         }
     }

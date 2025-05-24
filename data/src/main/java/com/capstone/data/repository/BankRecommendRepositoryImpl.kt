@@ -1,11 +1,15 @@
 package com.capstone.data.repository
 
 import com.capstone.data.mapper.toDTO
+import com.capstone.data.mapper.toDomain
+import com.capstone.data.mapper.toDomainList
 import com.capstone.data.remote.BankProductRemoteDataSource
 import com.capstone.domain.model.recommend.PostRecommendation
 import com.capstone.domain.model.recommend.RecommendationContent
+import com.capstone.domain.model.recommend.Recommendations
 import com.capstone.domain.model.recommend.ResponseRecommendation
 import com.capstone.domain.repository.BankRecommendRepository
+import com.capstone.util.LoggerUtil
 import javax.inject.Inject
 
 class BankRecommendRepositoryImpl @Inject constructor(
@@ -42,23 +46,23 @@ class BankRecommendRepositoryImpl @Inject constructor(
     override suspend fun sendBankProductRequest(postRecommendation: PostRecommendation): Result<ResponseRecommendation> {
         return try {
             val response = dataSource.sendBankProductRequest(postRecommendation.toDTO)
-
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) {
-                    Result.success(body.data.let {
+                val content = body?.data
+                if (content != null) {
+                    Result.success(
                         ResponseRecommendation(
-                            it.content,
-                            it.createdAt,
-                            it.id,
-                            it.strategy
+                            content = content.content.toDomain(),
+                            createdAt = content.createdAt,
+                            id = content.id,
+                            strategy = content.strategy
                         )
-                    })
+                    )
                 } else {
-                    throw Exception("Body is null")
+                    Result.failure(Exception("Body data is null"))
                 }
             } else {
-                throw Exception("Request is failure")
+                Result.failure(Exception("Response not successful"))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -71,20 +75,21 @@ class BankRecommendRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) {
-                    Result.success(body.data.let {
+                val content = body?.data
+                if (content != null) {
+                    Result.success(
                         ResponseRecommendation(
-                            it.content,
-                            it.createdAt,
-                            it.id,
-                            it.strategy
+                            content = content.content.toDomain(),
+                            createdAt = content.createdAt,
+                            id = content.id,
+                            strategy = content.strategy
                         )
-                    })
+                    )
                 } else {
-                    throw Exception("Body is null")
+                    Result.failure(Exception("Body data is null"))
                 }
             } else {
-                throw Exception("Request is failure")
+                Result.failure(Exception("Response not successful"))
             }
         } catch (e: Exception) {
             Result.failure(e)

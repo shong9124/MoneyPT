@@ -25,5 +25,6 @@
     <color name="red">#E53935</color>
     <color name="orange">#FFA726</color>
     <color name="green">#43A047</color>
+    <color name="blue">#0000FF</color>
     <color name="purple">#8E24AA</color>
 </resources>

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GetDetailData(
     @SerializedName("content")
-    val content: String,
+    val content: RecommendationListDTO,
     @SerializedName("createdAt")
     val createdAt: String,
     @SerializedName("id")
