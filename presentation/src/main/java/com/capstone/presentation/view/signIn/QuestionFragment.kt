@@ -9,6 +9,7 @@ import com.capstone.navigation.NavigationRoutes
 import com.capstone.presentation.base.BaseFragment
 import com.capstone.presentation.databinding.FragmentQuestionBinding
 import com.capstone.presentation.util.UiState
+import com.capstone.presentation.view.myPage.UserInfoViewModel
 import com.capstone.util.LoggerUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -17,6 +18,8 @@ import kotlinx.coroutines.launch
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
     private val viewModel: PropensityViewModel by viewModels()
+    private val userInfoViewModel : UserInfoViewModel by viewModels()
+    private var propensityId: String = ""
 
     private val questionList = listOf(
         Question(
@@ -179,8 +182,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
                 LoggerUtil.d(resultString)
 
-                // TODO: postSurveyResult(resultString) 함수 추가 시 호출
                 viewModel.sendQuestionResult(UserSurveyResult(resultString))
+                userInfoViewModel.patchUserPropensity(propensityId)
             }
         }
     }
@@ -188,12 +191,25 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
     override fun setObserver() {
         super.setObserver()
 
-        viewModel.propensityState.observe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.propensityState.observe(viewLifecycleOwner) { propensity ->
+            when (propensity) {
                 is UiState.Loading -> {}
                 is UiState.Success -> {
-                    val route = NavigationRoutes.RecommendFinancailItem
-                    moveToNext(route)
+
+                    propensityId = propensity.data.id
+
+                    userInfoViewModel.patchUserPropensityState.observe(viewLifecycleOwner) {
+                        when (it) {
+                            is UiState.Loading -> {}
+                            is UiState.Success -> {
+                                val route = NavigationRoutes.RecommendFinancailItem
+                                moveToNext(route)
+                            }
+                            is UiState.Error -> {
+                                showToast("금융 성향 분석 수정에 실패했습니다.")
+                            }
+                        }
+                    }
                 }
                 is UiState.Error -> {
                     showToast("금융 성향 분석에 실패했습니다.")

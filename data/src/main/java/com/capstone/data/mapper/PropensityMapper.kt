@@ -1,11 +1,15 @@
 package com.capstone.data.mapper
 
 import com.capstone.data.model.signUp.GetPropensityListResponseDTO
+import com.capstone.data.model.signUp.PropensityAnalysis
 import com.capstone.data.model.signUp.PropensityInfoContent
 import com.capstone.data.model.signUp.PropensityPagination
 import com.capstone.data.model.signUp.UserSurveyResultRequestDTO
+import com.capstone.data.model.signUp.UserSurveyResultResponseDTO
+import com.capstone.domain.model.DomainPostPropensityData
 import com.capstone.domain.model.DomainPropensityPagination
 import com.capstone.domain.model.GetPropensityListData
+import com.capstone.domain.model.PropensityContent
 import com.capstone.domain.model.PropensityInfo
 import com.capstone.domain.model.UserSurveyResult
 
@@ -23,6 +27,25 @@ fun GetPropensityListResponseDTO.toDomainModel(): GetPropensityListData {
         // 각 필드 매핑
         content,
         pagination
+    )
+}
+
+fun UserSurveyResultResponseDTO.toDomain() : DomainPostPropensityData {
+    val data = this.data
+    val propensityAnalysis = data.propensityAnalysis.toDomain()
+
+    return DomainPostPropensityData(
+        data.id,
+        propensityAnalysis
+    )
+}
+
+fun PropensityAnalysis.toDomain() : PropensityContent {
+    return PropensityContent(
+        this.type,
+        this.description,
+        this.prosAndCons,
+        this.precaution
     )
 }
 

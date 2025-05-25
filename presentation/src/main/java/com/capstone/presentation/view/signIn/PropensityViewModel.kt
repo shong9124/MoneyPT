@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.capstone.domain.model.DomainPostPropensityData
 import com.capstone.domain.model.GetPropensityListData
 import com.capstone.domain.model.UserSurveyResult
 import com.capstone.domain.usecase.signUp.GetPropensityListUseCase
@@ -18,10 +19,10 @@ class PropensityViewModel @Inject constructor(
     private val propensityUseCase: PropensityUseCase,
     private val getPropensityListUseCase: GetPropensityListUseCase
 ): ViewModel() {
-    private val _propensityState = MutableLiveData<UiState<Boolean>>(UiState.Loading)
+    private val _propensityState = MutableLiveData<UiState<DomainPostPropensityData>>(UiState.Loading)
     private val _getPropensityListState = MutableLiveData<UiState<GetPropensityListData>>(UiState.Loading)
 
-    val propensityState: LiveData<UiState<Boolean>> get() = _propensityState
+    val propensityState: LiveData<UiState<DomainPostPropensityData>> get() = _propensityState
     val getPropensityListState: LiveData<UiState<GetPropensityListData>> get() = _getPropensityListState
 
     fun sendQuestionResult(userSurveyResult: UserSurveyResult) {
