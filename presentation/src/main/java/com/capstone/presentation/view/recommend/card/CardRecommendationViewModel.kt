@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,11 +72,11 @@ class CardRecommendationViewModel @Inject constructor(
         }
     }
 
-    fun sendPaymentRequest(postPaymentInfo: PostPaymentInfo) {
+    fun uploadEncryptedExcel(file: File, password: String) {
         _sendPaymentRequestState.value = UiState.Loading
 
         viewModelScope.launch {
-            sendPaymentRequestUseCase.invoke(postPaymentInfo)
+            sendPaymentRequestUseCase.invoke(file, password)
                 .onSuccess {
                     _recommendationContent.value = it
                     _sendPaymentRequestState.value = UiState.Success(it)

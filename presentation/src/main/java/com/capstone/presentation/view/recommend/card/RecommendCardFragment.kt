@@ -1,6 +1,9 @@
 package com.capstone.presentation.view.recommend.card
 
+import android.text.InputType
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.recommend.card.PostPaymentInfo
@@ -12,22 +15,30 @@ import com.capstone.presentation.util.UiState
 import com.capstone.util.ExcelUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.File
 
 @AndroidEntryPoint
 class RecommendCardFragment : BaseFragment<FragmentRecommendCardBinding>() {
 
     private val viewModel: CardRecommendationViewModel by activityViewModels()
 
-    // SAF를 위한 Activity Result Launcher
-    private val excelPickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {
-            requireContext().contentResolver.openInputStream(it)?.use { inputStream ->
-                val excelString = ExcelUtils.readExcelAsString(inputStream)
-                val postInfo = PostPaymentInfo(file = excelString)
-                viewModel.sendPaymentRequest(postInfo)
+    // 엑셀 파일 선택 SAF 런처
+    private val excelPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                val fileName = "uploaded_excel.xlsx"
+                val inputStream = requireContext().contentResolver.openInputStream(it)
+                val file = File(requireContext().cacheDir, fileName)
+
+                inputStream?.use { input ->
+                    file.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                showPasswordInputDialog(file) // ← 여기서 다이얼로그 호출
             }
         }
-    }
 
     override fun initView() {
 
@@ -67,6 +78,29 @@ class RecommendCardFragment : BaseFragment<FragmentRecommendCardBinding>() {
             }
         }
     }
+
+    private fun showPasswordInputDialog(file: File) {
+        val editText = EditText(requireContext()).apply {
+            hint = "비밀번호를 입력하세요"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            setPadding(32, 24, 32, 24)
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("비밀번호 입력")
+            .setView(editText)
+            .setPositiveButton("확인") { _, _ ->
+                val password = editText.text.toString()
+                if (password.isNotBlank()) {
+                    viewModel.uploadEncryptedExcel(file, password)
+                } else {
+                    showToast("비밀번호를 입력해주세요.")
+                }
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
 
     private fun moveToNext(route: NavigationRoutes) {
         lifecycleScope.launch {

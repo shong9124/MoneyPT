@@ -4,5 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PostPaymentInfoDTO(
     @SerializedName("file")
-    val file : String
+    val file : String,
+    @SerializedName("password")
+    val password: String
 )

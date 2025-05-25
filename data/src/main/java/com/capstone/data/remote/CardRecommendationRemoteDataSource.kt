@@ -2,8 +2,9 @@ package com.capstone.data.remote
 
 import com.capstone.data.model.recommend.card.GetCardDetailRecommendationResponseDTO
 import com.capstone.data.model.recommend.card.GetCardRecommendationsResponseDTO
-import com.capstone.data.model.recommend.card.PostPaymentInfoDTO
 import com.capstone.data.model.recommend.card.PostPaymentInfoResponseDTO
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 interface CardRecommendationRemoteDataSource {
@@ -13,8 +14,9 @@ interface CardRecommendationRemoteDataSource {
         size: Int
     ): Response<GetCardRecommendationsResponseDTO>
 
-    suspend fun sendPaymentRequest(
-        body: PostPaymentInfoDTO
+    suspend fun uploadEncryptedExcel(
+        file: MultipartBody.Part,
+        password: RequestBody
     ): Response<PostPaymentInfoResponseDTO>
 
     suspend fun getDetailCardRecommendations(
