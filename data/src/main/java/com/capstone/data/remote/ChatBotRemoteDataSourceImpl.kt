@@ -15,10 +15,20 @@ class ChatBotRemoteDataSourceImpl @Inject constructor(
     private val sharedPreferences: MySharedPreferences,
     private val service: ChatBotService
 ) : ChatBotRemoteDataSource {
+    // ChatBotRemoteDataSourceImpl.kt
     override suspend fun getChatList(size: Int): Response<GetChatResponseDTO> {
         val accessToken = sharedPreferences.getString(KEY_ACCESS_TOKEN, "")
         val cursor = sharedPreferences.getString(CURSOR, "")
         val response = service.getChatList(accessToken, cursor, size)
+
+        // ✅ 서버에서 받아온 마지막 메시지 ID를 다음 cursor로 저장
+        if (response.isSuccessful) {
+            val list = response.body()?.data?.conversationLogResponses
+            if (!list.isNullOrEmpty()) {
+                val lastId = list.last().id
+                sharedPreferences.setString(CURSOR, lastId)
+            }
+        }
 
         return response
     }
@@ -34,7 +44,7 @@ class ChatBotRemoteDataSourceImpl @Inject constructor(
         if (response.isSuccessful) {
             sharedPreferences.setString(CURSOR, response.body()?.data?.conversationId ?: "")
             sharedPreferences.setString(SUMMARY, response.body()?.data?.summary ?: "")
-        } else sharedPreferences.delete(CURSOR)
+        }
 
         return response
     }

@@ -15,20 +15,34 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
     companion object {
         private const val VIEW_TYPE_USER = 1
         private const val VIEW_TYPE_BOT = 2
+        private const val VIEW_TYPE_LOADING = 3
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (messages[position].isUser) VIEW_TYPE_USER else VIEW_TYPE_BOT
+        val message = messages[position]
+        return when {
+            message.isLoading -> VIEW_TYPE_LOADING
+            message.isUser -> VIEW_TYPE_USER
+            else -> VIEW_TYPE_BOT
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == VIEW_TYPE_USER) {
-            val view = inflater.inflate(R.layout.item_chat_user, parent, false)
-            UserViewHolder(view)
-        } else {
-            val view = inflater.inflate(R.layout.item_chat_bot, parent, false)
-            BotViewHolder(view)
+        return when (viewType) {
+            VIEW_TYPE_USER -> {
+                val view = inflater.inflate(R.layout.item_chat_user, parent, false)
+                UserViewHolder(view)
+            }
+            VIEW_TYPE_BOT -> {
+                val view = inflater.inflate(R.layout.item_chat_bot, parent, false)
+                BotViewHolder(view)
+            }
+            VIEW_TYPE_LOADING -> {
+                val view = inflater.inflate(R.layout.item_chat_loading, parent, false)
+                LoadingViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
         }
     }
 
@@ -36,19 +50,10 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
         val chat = messages[position]
         LoggerUtil.d("🪵 바인딩 [$position]: $chat")
 
-        if (!chat.isUser) {
-            val botHolder = holder as BotViewHolder
-            if (chat.isLoading) {
-                botHolder.progressBar.visibility = View.VISIBLE
-                botHolder.tvMessage.visibility = View.GONE
-            } else {
-                botHolder.progressBar.visibility = View.GONE
-                botHolder.tvMessage.visibility = View.VISIBLE
-                botHolder.tvMessage.text = chat.message
-            }
-        } else {
-            val userHolder = holder as UserViewHolder
-            userHolder.bind(chat.message)
+        when (holder) {
+            is UserViewHolder -> holder.bind(chat.message)
+            is BotViewHolder -> holder.bind(chat)
+            is LoadingViewHolder -> { /* nothing to bind */ }
         }
     }
 
@@ -76,4 +81,7 @@ class ChatAdapter(private val messages: List<ChatMessage>) :
             }
         }
     }
+
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
 }

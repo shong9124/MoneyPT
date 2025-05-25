@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager // 수정 부분
+import androidx.recyclerview.widget.RecyclerView
 import com.capstone.data.util.MySharedPreferences
 import com.capstone.domain.model.chat.PostMessage
 import com.capstone.navigation.NavigationCommand
@@ -32,44 +33,54 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
     private val messages = mutableListOf<ChatMessage>()
 
     override fun initView() {
-
         setBottomNav()
 
-        viewModel.getChatList(10)
+        setUpRecyclerView()  // 추가
 
+        // 1. RecyclerView 어댑터와 레이아웃 매니저 초기화 (가장 먼저)
         chatAdapter = ChatAdapter(messages)
         binding.rvChat.adapter = chatAdapter
+        binding.rvChat.layoutManager = LinearLayoutManager(requireContext())
 
-        // 텍스트 입력 감지하여 버튼 활성/비활성
+        // ViewModel 메시지 리스트 observe
+        viewModel.chatMessages.observe(viewLifecycleOwner) { newList ->
+            messages.clear()
+            messages.addAll(newList)
+            chatAdapter.notifyDataSetChanged()
+            binding.rvChat.scrollToPosition(messages.size - 1)
+        }
+
+        if (viewModel.chatMessages.value.isNullOrEmpty()) {
+            viewModel.initChat()  // cursor 초기화하고 chatList 요청
+        }
+
+        // 4. EditText 텍스트 변화 감지해서 전송 버튼 활성/비활성 처리
         binding.etChatInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                binding.btnSend.isEnabled = !s.isNullOrBlank()
-                binding.btnSend.setBackgroundResource(R.drawable.ic_send_able)
-
-                if (binding.etChatInput.text.toString() == "") {
-                    binding.btnSend.setBackgroundResource(R.drawable.ic_send_disable)
-                }
+                val isNotBlank = !s.isNullOrBlank()
+                binding.btnSend.isEnabled = isNotBlank
+                binding.btnSend.setBackgroundResource(
+                    if (isNotBlank) R.drawable.ic_send_able else R.drawable.ic_send_disable
+                )
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        // 전송 버튼 클릭 시 메시지 추가
+        // 5. 전송 버튼 클릭 시 메시지 추가 및 서버 전송
         binding.btnSend.setOnClickListener {
             val userMessage = binding.etChatInput.text.toString()
             if (userMessage.isNotBlank()) {
-                // 사용자 메시지를 UI에 먼저 추가
                 messages.add(ChatMessage(userMessage, isUser = true))
                 chatAdapter.notifyItemInserted(messages.size - 1)
                 binding.rvChat.scrollToPosition(messages.size - 1)
 
-                // ViewModel을 통해 서버에 메시지 전송
                 viewModel.sendChat(
                     embedding = true,
                     postMessage = PostMessage(
                         requestMessage = userMessage,
-                        summary = "" // 서버 응답에 포함됨
+                        summary = ""
                     )
                 )
 
@@ -93,42 +104,9 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
     override fun setObserver() {
         super.setObserver()
 
-        // 채팅 목록 가져오기
         viewModel.getChatListState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Loading -> {
-                    // 필요 시 로딩 UI 처리
-                }
-                is UiState.Success -> {
-                    // 🔧 모든 메시지 초기화 (로딩 메시지 제거 목적)
-                    messages.clear()
-                    chatAdapter.notifyDataSetChanged()
-
-                    val chatList = state.data
-                    if (chatList.isNullOrEmpty()) {
-                        addInitialBotMessages()
-                    } else {
-                        // ⚠️ 여기서 chatList를 역순으로 처리해서 오래된 메시지가 먼저 오도록
-                        chatList.asReversed().forEach { chat ->
-                            messages.add(ChatMessage(chat.requestMessage, isUser = true))
-                            messages.add(ChatMessage(chat.responseMessage, isUser = false))
-                        }
-                        chatAdapter.notifyDataSetChanged()
-                        // 최신 메시지가 맨 아래이므로 마지막 위치로 스크롤
-                        binding.rvChat.scrollToPosition(messages.size - 1)
-                    }
-                }
-                is UiState.Error -> {
-                    showToast("채팅 불러오기 실패: ${state.message}")
-                    addInitialBotMessages()
-                }
-            }
-        }
-
-        viewModel.sendChatState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    // 중복된 로딩 메시지 추가 방지
                     val hasLoading = messages.any { it.isLoading }
                     if (!hasLoading) {
                         messages.add(ChatMessage(message = "", isUser = false, isLoading = true))
@@ -136,36 +114,79 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
                         binding.rvChat.scrollToPosition(messages.size - 1)
                     }
                 }
-
                 is UiState.Success -> {
-                    // 마지막 메시지가 로딩이면 제거
-                    if (messages.isNotEmpty() && messages.last().isLoading) {
-                        val lastIndex = messages.size - 1
-                        messages.removeAt(lastIndex)
-                        chatAdapter.notifyItemRemoved(lastIndex)
+                    val loadingIndex = messages.indexOfFirst { it.isLoading }
+                    if (loadingIndex != -1) {
+                        messages.removeAt(loadingIndex)
+                        chatAdapter.notifyItemRemoved(loadingIndex)
                     }
 
-                    // 봇 응답 메시지 추가
-                    val botResponse = state.data.responseMessage
-                    messages.add(ChatMessage(botResponse, isUser = false))
-                    chatAdapter.notifyItemInserted(messages.size - 1)
-                    binding.rvChat.scrollToPosition(messages.size - 1)
+                    // 초기 메시지 보여줄지 판단 (빈 메시지일 때만)
+                    if (viewModel.chatMessages.value.isNullOrEmpty()) {
+                        addInitialBotMessages()
+                    }
                 }
 
                 is UiState.Error -> {
-                    // 마지막 메시지가 로딩이면 제거
-                    if (messages.isNotEmpty() && messages.last().isLoading) {
-                        val lastIndex = messages.size - 1
-                        messages.removeAt(lastIndex)
-                        chatAdapter.notifyItemRemoved(lastIndex)
+                    val loadingIndex = messages.indexOfFirst { it.isLoading }
+                    if (loadingIndex != -1) {
+                        messages.removeAt(loadingIndex)
+                        chatAdapter.notifyItemRemoved(loadingIndex)
                     }
+                    showToast("채팅 불러오기 실패: ${state.message}")
+                }
+            }
+        }
 
+        viewModel.sendChatState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
+                    if (messages.none { it.isLoading }) {
+                        messages.add(ChatMessage("", isUser = false, isLoading = true))
+                        chatAdapter.notifyItemInserted(messages.size - 1)
+                        binding.rvChat.scrollToPosition(messages.size - 1)
+                    }
+                }
+                is UiState.Success -> {
+                    val loadingIndex = messages.indexOfFirst { it.isLoading }
+                    if (loadingIndex != -1) {
+                        messages.removeAt(loadingIndex)
+                        chatAdapter.notifyItemRemoved(loadingIndex)
+                    }
+                    messages.add(ChatMessage(state.data.responseMessage, isUser = false))
+                    chatAdapter.notifyItemInserted(messages.size - 1)
+                    binding.rvChat.scrollToPosition(messages.size - 1)
+                }
+                is UiState.Error -> {
+                    val loadingIndex = messages.indexOfFirst { it.isLoading }
+                    if (loadingIndex != -1) {
+                        messages.removeAt(loadingIndex)
+                        chatAdapter.notifyItemRemoved(loadingIndex)
+                    }
                     showToast("챗봇 응답 실패: ${state.message}")
                 }
             }
         }
     }
 
+    private fun setUpRecyclerView() {
+        chatAdapter = ChatAdapter(messages)
+        binding.rvChat.adapter = chatAdapter
+
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.rvChat.layoutManager = layoutManager
+
+        // 무한 스크롤 감지
+        binding.rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                if (firstVisibleItemPosition == 0) {
+                    viewModel.loadMoreChats(3)
+                }
+            }
+        })
+    }
 
     private fun setBottomNav(){
         binding.bottomNav.ivChat.setImageResource(R.drawable.ic_chat_able)
