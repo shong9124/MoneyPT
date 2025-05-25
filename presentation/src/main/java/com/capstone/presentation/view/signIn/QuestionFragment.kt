@@ -1,5 +1,8 @@
 package com.capstone.presentation.view.signIn
 
+import android.app.ProgressDialog
+import android.graphics.Color
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.FinancialType
@@ -19,6 +22,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
     private val viewModel: PropensityViewModel by viewModels()
     private val userInfoViewModel : UserInfoViewModel by viewModels()
+
+    private lateinit var customProgressDialog: ProgressDialog
 
     private val questionList = listOf(
         Question(
@@ -144,6 +149,14 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
     override fun initView() {
 
+        // ProgressDialog 초기화
+        customProgressDialog = ProgressDialog(requireContext())
+        customProgressDialog.setCancelable(false)
+        customProgressDialog.window?.setBackgroundDrawable(
+            Color.TRANSPARENT.toDrawable()
+        )
+        customProgressDialog.setMessage("로딩 중입니다. 잠시만 기다려주세요...")
+
         setupOptionClickListeners()
         showQuestion(currentQuestionIndex)
 
@@ -180,6 +193,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
                 LoggerUtil.d(resultString)
 
                 viewModel.sendQuestionResult(UserSurveyResult(resultString))
+
+                customProgressDialog.show() // 로딩창 표시
             }
         }
     }
@@ -193,6 +208,8 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
                 is UiState.Success -> {
 
                     userInfoViewModel.patchUserPropensity(propensity.data.id)
+
+                    customProgressDialog.dismiss()
 
                     val route = NavigationRoutes.RecommendFinancailItem
                     moveToNext(route)
