@@ -1,5 +1,6 @@
 package com.capstone.data.remote
 
+import com.capstone.data.model.signUp.GetPropensityListResponseDTO
 import com.capstone.data.model.signUp.UserSurveyResultRequestDTO
 import com.capstone.data.model.signUp.UserSurveyResultResponseDTO
 import com.capstone.data.service.PropensityService
@@ -13,7 +14,19 @@ class PropensityRemoteDataSourceImpl @Inject constructor(
     private val service: PropensityService
 ) : PropensityRemoteDataSource {
     override suspend fun sendQuestionResult(body: UserSurveyResultRequestDTO): Response<UserSurveyResultResponseDTO> {
-        val response = service.sendQuestionResult(sharedPreferences.getString(KEY_ACCESS_TOKEN, ""), body)
+        val response =
+            service.sendQuestionResult(sharedPreferences.getString(KEY_ACCESS_TOKEN, ""), body)
+
+        return response
+    }
+
+    override suspend fun getPropensityList(
+        page: Int,
+        size: Int
+    ): Response<GetPropensityListResponseDTO> {
+        val response = service.getPropensityList(
+            sharedPreferences.getString(KEY_ACCESS_TOKEN, ""), page, size
+        )
 
         return response
     }

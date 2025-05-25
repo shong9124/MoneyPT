@@ -1,17 +1,16 @@
 package com.capstone.presentation.view.myPage
 
-import android.app.AlertDialog
-import android.text.InputType
-import android.widget.EditText
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.capstone.domain.model.FinancialType
 import com.capstone.navigation.NavigationCommand
 import com.capstone.navigation.NavigationRoutes
 import com.capstone.presentation.R
 import com.capstone.presentation.base.BaseFragment
 import com.capstone.presentation.databinding.FragmentMyPageBinding
-import com.capstone.util.LoggerUtil
+import com.capstone.presentation.util.UiState
+import com.capstone.presentation.view.signIn.PropensityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -20,71 +19,55 @@ import kotlinx.coroutines.launch
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
 
     private var timeJob: Job? = null
+    private val propensityViewModel: PropensityViewModel by viewModels()
+    private var propensityId: String = ""
 
     override fun initView() {
 
         setBottomNav()
 
-        binding.btnEditAsset.setOnClickListener {
-            val editAsset = EditText(requireContext()).apply {
-                inputType = InputType.TYPE_CLASS_NUMBER
-                hint = "새 자산 금액 입력"
-            }
+        propensityViewModel.getPropensityList(0, 10)
 
-            AlertDialog.Builder(requireContext())
-                .setTitle("자산 수정")
-                .setView(editAsset)
-                .setPositiveButton("확인") { _, _ ->
-                    val newAsset = editAsset.text.toString()
-                    if (newAsset.isNotBlank()) {
-                        val assetValue = newAsset.toIntOrNull()
-                        if (assetValue != null) {
-                            LoggerUtil.d("MyPage", "수정된 자산: $assetValue")
+    }
 
-                            // 숫자 포맷팅: 1000 -> 1,000 만원
-                            val formatted = String.format("%,d 만원", assetValue)
-                            binding.tvCurrentAsset.text = formatted
-                        } else {
-                            Toast.makeText(requireContext(), "유효한 숫자를 입력해주세요", Toast.LENGTH_SHORT).show()
+    override fun setObserver() {
+        super.setObserver()
+
+        propensityViewModel.getPropensityListState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Loading -> {}
+                is UiState.Success -> {
+                    it.data.content.map { content ->
+
+                        val label = when (content.propensity) {
+                            "BALANCED" -> "균형형"
+                            "INVESTMENT" -> "공격형"
+                            "CONSERVATIVE" -> "저축형"
+                            "CONSUMPTIVE" -> "소비형"
+                            "FUSION" -> "융합형"
+                            else -> "금융 성향 분석 결과가 없습니다."
                         }
+
+                        propensityId = content.id
+                        binding.tvFinancialMbti.text = label
                     }
                 }
-                .setNegativeButton("취소", null)
-                .show()
-        }
 
-        binding.btnEditIncome.setOnClickListener {
-            val editIncome = EditText(requireContext()).apply {
-                inputType = InputType.TYPE_CLASS_NUMBER // 숫자만 입력되도록 설정
-                hint = "새 월 소득 금액 입력"
-            }
-
-            AlertDialog.Builder(requireContext())
-                .setTitle("월 소득 수정")
-                .setView(editIncome)
-                .setPositiveButton("확인") { _, _ ->
-                    val newIncome = editIncome.text.toString()
-                    if (newIncome.isNotBlank()) {
-                        val incomeValue = newIncome.toIntOrNull()
-                        if (incomeValue != null) {
-                            LoggerUtil.d("MyPage", "수정된 월 소득: $incomeValue")
-
-                            // 숫자 포맷팅: 1000 -> 1,000
-                            val formattedIncome = String.format("%,d 원", incomeValue)
-                            binding.tvMonthIncome.text = formattedIncome
-                        } else {
-                            Toast.makeText(requireContext(), "유효한 숫자를 입력해주세요", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                is UiState.Error -> {
+                    showToast("회원정보 불러오기에 실패했습니다.")
                 }
-                .setNegativeButton("취소", null)
-                .show()
+            }
         }
     }
 
-    private fun setBottomNav(){
+    private fun setBottomNav() {
         binding.bottomNav.ivMyPage.setImageResource(R.drawable.ic_my_page_able)
-        binding.bottomNav.tvMyPage.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary))
+        binding.bottomNav.tvMyPage.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.primary
+            )
+        )
 
         binding.bottomNav.menuRecommend.setOnClickListener {
             timeJob?.cancel()
