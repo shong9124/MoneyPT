@@ -10,6 +10,8 @@ import com.capstone.data.remote.ChatBotRemoteDataSource
 import com.capstone.data.remote.ChatBotRemoteDataSourceImpl
 import com.capstone.data.remote.PropensityRemoteDataSource
 import com.capstone.data.remote.PropensityRemoteDataSourceImpl
+import com.capstone.data.remote.UserInfoRemoteDataSource
+import com.capstone.data.remote.UserInfoRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -49,5 +51,11 @@ abstract class DataSourceModule {
     abstract fun bindCardRecommendationRemoteDataSource(
         cardRecommendationRemoteDataSourceImpl: CardRecommendationRemoteDataSourceImpl
     ): CardRecommendationRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserInfoRemoteDataSource(
+        userInfoRemoteDataSourceImpl: UserInfoRemoteDataSourceImpl
+    ): UserInfoRemoteDataSource
 
 }

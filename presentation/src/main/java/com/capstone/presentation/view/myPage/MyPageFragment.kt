@@ -1,5 +1,6 @@
 package com.capstone.presentation.view.myPage
 
+import android.annotation.SuppressLint
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,16 +21,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
 
     private var timeJob: Job? = null
     private val propensityViewModel: PropensityViewModel by viewModels()
+    private val userInfoViewModel: UserInfoViewModel by viewModels()
     private var propensityId: String = ""
 
     override fun initView() {
 
         setBottomNav()
 
+        userInfoViewModel.getUserInfo()
         propensityViewModel.getPropensityList(0, 10)
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun setObserver() {
         super.setObserver()
 
@@ -54,7 +58,22 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
                 }
 
                 is UiState.Error -> {
-                    showToast("회원정보 불러오기에 실패했습니다.")
+                    showToast("회원 정보 불러오기에 실패했습니다.")
+                }
+            }
+        }
+
+        userInfoViewModel.userInfoState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Loading -> {}
+                is  UiState.Success -> {
+                    binding.tvUserName.text = it.data.nickname
+                    binding.tvMonthIncome.text = it.data.salary.toString() + " 만원"
+                    binding.tvCurrentAsset.text = it.data.asset.toString() + " 만원"
+                }
+
+                is  UiState.Error -> {
+                    showToast("회원 정보 불러오기에 실패했습니다.")
                 }
             }
         }

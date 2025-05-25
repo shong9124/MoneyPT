@@ -5,6 +5,7 @@ import com.capstone.data.service.BankProductService
 import com.capstone.data.service.CardRecommendService
 import com.capstone.data.service.ChatBotService
 import com.capstone.data.service.PropensityService
+import com.capstone.data.service.UserInfoService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,5 +40,10 @@ internal class ServiceModule {
     fun providesCardRecommendationService(
         client: Retrofit
     ): CardRecommendService = client.create(CardRecommendService::class.java)
+
+    @Provides
+    fun providesUserInfoService(
+        client: Retrofit
+    ): UserInfoService = client.create(UserInfoService::class.java)
 
 }

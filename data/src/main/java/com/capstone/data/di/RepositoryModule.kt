@@ -5,11 +5,13 @@ import com.capstone.data.repository.BankRecommendRepositoryImpl
 import com.capstone.data.repository.CardRecommendationRepositoryImpl
 import com.capstone.data.repository.ChatBotRepositoryImpl
 import com.capstone.data.repository.PropensityRepositoryImpl
+import com.capstone.data.repository.UserInfoRepositoryImpl
 import com.capstone.domain.repository.AuthRepository
 import com.capstone.domain.repository.BankRecommendRepository
 import com.capstone.domain.repository.CardRecommendationRepository
 import com.capstone.domain.repository.ChatBotRepository
 import com.capstone.domain.repository.PropensityRepository
+import com.capstone.domain.repository.UserInfoRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -40,4 +42,7 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindsCardRecommendationRepository(impl: CardRecommendationRepositoryImpl): CardRecommendationRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindsUserInfoRepository(impl: UserInfoRepositoryImpl) : UserInfoRepository
 }
