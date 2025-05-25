@@ -96,4 +96,8 @@ class CardRecommendationViewModel @Inject constructor(
                 }
         }
     }
+
+    fun clearData() {
+        _sendPaymentRequestState.value = UiState.Loading
+    }
 }

@@ -93,4 +93,8 @@ class BankProductViewModel @Inject constructor(
                 }
         }
     }
+
+    fun clearData() {
+        _sendBankProductRequestState.value = UiState.Loading
+    }
 }

@@ -1,5 +1,8 @@
 package com.capstone.presentation.view.recommend.bank
 
+import android.app.ProgressDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -15,14 +18,25 @@ import com.capstone.presentation.util.UiState
 import com.capstone.util.LoggerUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import androidx.core.graphics.drawable.toDrawable
 
 @AndroidEntryPoint
 class FinancialItemFragment : BaseFragment<FragmentFinancialItemBinding>() {
 
     // viewModel의 결과를 공유하기 위함
     private val viewModel: BankProductViewModel by activityViewModels()
+    private lateinit var customProgressDialog: ProgressDialog
 
     override fun initView() {
+
+        // ProgressDialog 초기화
+        customProgressDialog = ProgressDialog(requireContext())
+        customProgressDialog.setCancelable(false)
+        customProgressDialog.window?.setBackgroundDrawable(
+            Color.TRANSPARENT.toDrawable()
+        )
+        customProgressDialog.setMessage("로딩 중입니다. 잠시만 기다려주세요...")
+
         val spinner = binding.spinnerSelectPropensity
         val items = listOf("보수형", "소비형", "투자형", "융합형", "균형형")
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, items)
@@ -55,6 +69,8 @@ class FinancialItemFragment : BaseFragment<FragmentFinancialItemBinding>() {
             val selectedText = binding.spinnerSelectPropensity.selectedItem as String
             val mappedPropensity = mapSelectedPropensity(selectedText)
 
+            customProgressDialog.show() // 로딩창 표시
+
             viewModel.sendBankProductRequest(
                 PostRecommendation(
                     amount = binding.etEnterAmount.text.toString().toLong() * 10000,
@@ -70,10 +86,9 @@ class FinancialItemFragment : BaseFragment<FragmentFinancialItemBinding>() {
 
         viewModel.sendBankProductRequestState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Loading -> {
-                    showToast("로딩중입니다.\n잠시 기다려주세요.")
-                }
+                is UiState.Loading -> { }
                 is UiState.Success -> {
+                    customProgressDialog.dismiss()
                     val route = NavigationRoutes.FinancialItemResult
                     moveToNext(route)
                 }

@@ -127,9 +127,6 @@
         android:label="fragment_financial_item_result"
         tools:layout="@layout/fragment_financial_item_result"
         app:route="financial_item_result">
-        <action
-            android:id="@+id/action_financialItemResultFragment_to_recommendFinancialItemFragment"
-            app:destination="@id/recommendFinancialItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/recommendCardListResultFragment3"

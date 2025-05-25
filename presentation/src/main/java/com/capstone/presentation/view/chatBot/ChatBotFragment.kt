@@ -35,7 +35,7 @@ class ChatBotFragment : BaseFragment<FragmentChatBotBinding>() {
 
         setBottomNav()
 
-        viewModel.getChatList(3)
+        viewModel.getChatList(10)
 
         chatAdapter = ChatAdapter(messages)
         binding.rvChat.adapter = chatAdapter

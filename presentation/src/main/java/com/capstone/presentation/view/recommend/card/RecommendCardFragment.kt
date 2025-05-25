@@ -1,9 +1,12 @@
 package com.capstone.presentation.view.recommend.card
 
+import android.app.ProgressDialog
+import android.graphics.Color
 import android.text.InputType
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.recommend.card.PostPaymentInfo
@@ -21,6 +24,7 @@ import java.io.File
 class RecommendCardFragment : BaseFragment<FragmentRecommendCardBinding>() {
 
     private val viewModel: CardRecommendationViewModel by activityViewModels()
+    private lateinit var customProgressDialog: ProgressDialog
 
     // 엑셀 파일 선택 SAF 런처
     private val excelPickerLauncher =
@@ -41,6 +45,14 @@ class RecommendCardFragment : BaseFragment<FragmentRecommendCardBinding>() {
         }
 
     override fun initView() {
+
+        // ProgressDialog 초기화
+        customProgressDialog = ProgressDialog(requireContext())
+        customProgressDialog.setCancelable(false)
+        customProgressDialog.window?.setBackgroundDrawable(
+            Color.TRANSPARENT.toDrawable()
+        )
+        customProgressDialog.setMessage("로딩 중입니다. 잠시만 기다려주세요...")
 
         binding.btnBackToMenu.setOnClickListener {
             lifecycleScope.launch {
@@ -66,6 +78,7 @@ class RecommendCardFragment : BaseFragment<FragmentRecommendCardBinding>() {
         viewModel.sendPaymentRequestState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Success -> {
+                    customProgressDialog.dismiss()
                     // 업로드 성공 시 다음 화면으로 이동
                     moveToNext(NavigationRoutes.RecommendCardResult)
                 }
@@ -93,6 +106,7 @@ class RecommendCardFragment : BaseFragment<FragmentRecommendCardBinding>() {
                 val password = editText.text.toString()
                 if (password.isNotBlank()) {
                     viewModel.uploadEncryptedExcel(file, password)
+                    customProgressDialog.show() // 로딩창 표시
                 } else {
                     showToast("비밀번호를 입력해주세요.")
                 }

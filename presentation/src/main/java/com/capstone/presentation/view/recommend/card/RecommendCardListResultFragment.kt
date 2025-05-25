@@ -20,6 +20,8 @@ class RecommendCardListResultFragment :
     override fun initView() {
 
         binding.btnItemResultComplete.setOnClickListener {
+            viewModel.clearData()
+
             moveToNext(NavigationRoutes.RecommendFinancailItem)
         }
     }

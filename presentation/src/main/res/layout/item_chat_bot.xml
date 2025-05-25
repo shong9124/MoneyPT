@@ -23,6 +23,7 @@
         android:textColor="@color/primary"
         android:padding="12dp"
         android:text="Bot message"
+        android:textIsSelectable="true"
         android:textSize="14sp"
         style="@style/ibm_plex_h1"/>
 </LinearLayout>

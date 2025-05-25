@@ -21,6 +21,8 @@ class FinancialItemResultFragment : BaseFragment<FragmentFinancialItemResultBind
     override fun initView() {
 
         binding.btnItemResultComplete.setOnClickListener {
+            viewModel.clearData()
+
             val route = NavigationRoutes.RecommendFinancailItem
             moveToNext(route)
         }

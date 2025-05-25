@@ -19,7 +19,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
     private val viewModel: PropensityViewModel by viewModels()
     private val userInfoViewModel : UserInfoViewModel by viewModels()
-    private var propensityId: String = ""
 
     private val questionList = listOf(
         Question(
@@ -171,8 +170,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
             userAnswers.add(selectedOptionIndex!!)
 
-            LoggerUtil.d("$userAnswers")
-
             if (currentQuestionIndex < questionList.size - 1) {
                 currentQuestionIndex++
                 showQuestion(currentQuestionIndex)
@@ -183,7 +180,6 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
                 LoggerUtil.d(resultString)
 
                 viewModel.sendQuestionResult(UserSurveyResult(resultString))
-                userInfoViewModel.patchUserPropensity(propensityId)
             }
         }
     }
@@ -196,23 +192,24 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
                 is UiState.Loading -> {}
                 is UiState.Success -> {
 
-                    propensityId = propensity.data.id
+                    userInfoViewModel.patchUserPropensity(propensity.data.id)
 
-                    userInfoViewModel.patchUserPropensityState.observe(viewLifecycleOwner) {
-                        when (it) {
-                            is UiState.Loading -> {}
-                            is UiState.Success -> {
-                                val route = NavigationRoutes.RecommendFinancailItem
-                                moveToNext(route)
-                            }
-                            is UiState.Error -> {
-                                showToast("금융 성향 분석 수정에 실패했습니다.")
-                            }
-                        }
-                    }
+                    val route = NavigationRoutes.RecommendFinancailItem
+                    moveToNext(route)
                 }
                 is UiState.Error -> {
                     showToast("금융 성향 분석에 실패했습니다.")
+                }
+            }
+        }
+
+        userInfoViewModel.patchUserPropensityState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Loading -> {}
+                is UiState.Success -> {
+                }
+                is UiState.Error -> {
+                    showToast("금융 성향 분석 수정에 실패했습니다.")
                 }
             }
         }
