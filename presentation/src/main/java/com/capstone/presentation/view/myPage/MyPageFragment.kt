@@ -58,14 +58,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
                         val label = when (content.propensity) {
                             "BALANCED" -> "균형형"
                             "INVESTMENT" -> "공격형"
-                            "CONSERVATIVE" -> "저축형"
+                            "CONSERVATIVE" -> "보수형"
                             "CONSUMPTIVE" -> "소비형"
-                            "FUSION" -> "융합형"
+                            "" -> "융합형"
                             else -> "금융 성향 분석 결과가 없습니다."
                         }
 
-                        propensityId = content.id
-                        binding.tvFinancialMbti.text = label
+//                        propensityId = content.id
+//                        binding.tvFinancialMbti.text = label
                     }
                 }
 
@@ -79,9 +79,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
             when (it) {
                 is UiState.Loading -> {}
                 is  UiState.Success -> {
+                    binding.tvFinancialMbti.text = it.data.propensity
                     binding.tvUserName.text = it.data.nickname
-                    binding.tvMonthIncome.text = it.data.salary.toString() + " 만원"
-                    binding.tvCurrentAsset.text = it.data.asset.toString() + " 만원"
+                    binding.tvMonthIncome.text = (it.data.salary/10000).toString() + " 만원"
+                    binding.tvCurrentAsset.text = (it.data.asset/10000).toString() + " 만원"
                 }
 
                 is  UiState.Error -> {

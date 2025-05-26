@@ -45,9 +45,9 @@ class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>() {
         binding.cbFemale.setOnCheckedChangeListener(listener)
 
         binding.btnToSignComplete.setOnClickListener {
-            val assetText = binding.etEnterAsset.text.toString()
+            val assetText = binding.etEnterAsset.text.toString() + "0000"
             val name = binding.etEnterName.text.toString()
-            val salaryText = binding.etEnterMonthIncome.text.toString()
+            val salaryText = binding.etEnterMonthIncome.text.toString() + "0000"
 
             val rawBirthDate = binding.etEnterBirth.text.toString()
 
