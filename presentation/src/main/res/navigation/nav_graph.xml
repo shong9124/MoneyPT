@@ -82,6 +82,9 @@
         <action
             android:id="@+id/action_myPageFragment_to_recommendFinancialItemFragment"
             app:destination="@id/recommendFinancialItemFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatBotFragment"

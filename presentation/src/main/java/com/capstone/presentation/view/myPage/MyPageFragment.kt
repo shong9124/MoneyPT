@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.capstone.data.util.MySharedPreferences
+import com.capstone.data.util.MySharedPreferences.Companion.KEY_ACCESS_TOKEN
 import com.capstone.domain.model.FinancialType
 import com.capstone.navigation.NavigationCommand
 import com.capstone.navigation.NavigationRoutes
@@ -20,6 +22,9 @@ import kotlinx.coroutines.launch
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
 
     private var timeJob: Job? = null
+    private val sharedPreferences: MySharedPreferences by lazy {
+        MySharedPreferences(requireContext())
+    }
     private val propensityViewModel: PropensityViewModel by viewModels()
     private val userInfoViewModel: UserInfoViewModel by viewModels()
     private var propensityId: String = ""
@@ -30,6 +35,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
 
         userInfoViewModel.getUserInfo()
         propensityViewModel.getPropensityList(0, 10)
+
+        binding.tvLogout.setOnClickListener {
+            sharedPreferences.delete(KEY_ACCESS_TOKEN)
+
+            val route = NavigationRoutes.SignIn
+            moveToNext(route)
+        }
 
     }
 
@@ -104,6 +116,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
                     NavigationCommand.ToRoute(NavigationRoutes.ChatBot)
                 )
             }
+        }
+    }
+
+    private fun moveToNext(route: NavigationRoutes) {
+        lifecycleScope.launch {
+            navigationManager.navigate(
+                NavigationCommand.ToRoute(route)
+            )
         }
     }
 
