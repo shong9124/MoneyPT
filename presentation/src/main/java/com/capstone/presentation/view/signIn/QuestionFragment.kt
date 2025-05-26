@@ -223,11 +223,15 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
         userInfoViewModel.patchUserPropensityState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Loading -> {}
+                is UiState.Loading -> {
+                    LoggerUtil.d("금융 성향 분석 갱신중.")
+                }
                 is UiState.Success -> {
+                    LoggerUtil.d("금융 성향 분석 갱신 성공.")
                 }
                 is UiState.Error -> {
-                    showToast("금융 성향 분석 수정에 실패했습니다.")
+                    showToast("금융 성향 분석 갱신에 실패했습니다.")
+                    LoggerUtil.d("금융 성향 분석 갱신에 실패했습니다.")
                 }
             }
         }

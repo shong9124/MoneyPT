@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PatchUserPropensityResponseDTO(
     @SerializedName("data")
-    val `data`: UserPropensityData,
+    val data: UserPropensityData? = null,
     @SerializedName("message")
     val message: String,
     @SerializedName("statusCode")

@@ -23,17 +23,16 @@ fun GetUserInfoResponseDTO.toDomain() : GetUserInfo {
     )
 }
 
-fun PatchUserPropensityResponseDTO.toDomain() : PatchPropensity {
-    val data = this.data.toDomain()
-
+fun PatchUserPropensityResponseDTO.toDomain(): PatchPropensity {
+    val domainData = this.data?.toDomain()
     return PatchPropensity(
-        data,
-        this.message,
-        this.statusCode,
-        this.timeStamp
+        data = domainData ?: DomainPropensityData(),  // data가 null이면 빈 도메인 객체 반환
+        message = this.message,
+        statusCode = this.statusCode,
+        timeStamp = this.timeStamp
     )
 }
 
-fun UserPropensityData.toDomain() : DomainPropensityData {
-    return DomainPropensityData()
+fun UserPropensityData.toDomain(): DomainPropensityData {
+    return DomainPropensityData()  // 빈 데이터 클래스라도 이렇게 처리 가능
 }

@@ -1,4 +1,4 @@
 package com.capstone.data.model.user
 
 
-class UserPropensityData
+data class UserPropensityData(val dummy: String = "")
