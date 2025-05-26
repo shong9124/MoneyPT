@@ -18,19 +18,26 @@ import javax.inject.Inject
 class PropensityViewModel @Inject constructor(
     private val propensityUseCase: PropensityUseCase,
     private val getPropensityListUseCase: GetPropensityListUseCase
-): ViewModel() {
-    private val _propensityState = MutableLiveData<UiState<DomainPostPropensityData>>(UiState.Loading)
-    private val _getPropensityListState = MutableLiveData<UiState<GetPropensityListData>>(UiState.Loading)
+) : ViewModel() {
+    private val _propensityState =
+        MutableLiveData<UiState<DomainPostPropensityData>>(UiState.Loading)
+    private val _getPropensityListState =
+        MutableLiveData<UiState<GetPropensityListData>>(UiState.Loading)
+    private val _recommendationContent = MutableLiveData<DomainPostPropensityData>()
 
     val propensityState: LiveData<UiState<DomainPostPropensityData>> get() = _propensityState
     val getPropensityListState: LiveData<UiState<GetPropensityListData>> get() = _getPropensityListState
+    val recommendationContent: LiveData<DomainPostPropensityData> get() = _recommendationContent
 
     fun sendQuestionResult(userSurveyResult: UserSurveyResult) {
         _propensityState.value = UiState.Loading
 
         viewModelScope.launch {
             propensityUseCase.invoke(userSurveyResult)
-                .onSuccess { _propensityState.value = UiState.Success(it) }
+                .onSuccess {
+                    _recommendationContent.value = it
+                    _propensityState.value = UiState.Success(it)
+                }
                 .onFailure { _propensityState.value = UiState.Error(it.message.toString()) }
         }
     }
@@ -43,5 +50,9 @@ class PropensityViewModel @Inject constructor(
                 .onSuccess { _getPropensityListState.value = UiState.Success(it) }
                 .onFailure { _getPropensityListState.value = UiState.Error(it.message.toString()) }
         }
+    }
+
+    fun clearData() {
+        _propensityState.value = UiState.Loading
     }
 }

@@ -3,6 +3,7 @@ package com.capstone.presentation.view.signIn
 import android.app.ProgressDialog
 import android.graphics.Color
 import androidx.core.graphics.drawable.toDrawable
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.capstone.domain.model.FinancialType
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
-    private val viewModel: PropensityViewModel by viewModels()
+    private val viewModel: PropensityViewModel by activityViewModels()
     private val userInfoViewModel : UserInfoViewModel by viewModels()
 
     private lateinit var customProgressDialog: ProgressDialog
@@ -211,7 +212,7 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>() {
 
                     customProgressDialog.dismiss()
 
-                    val route = NavigationRoutes.RecommendFinancailItem
+                    val route = NavigationRoutes.QuestionResult
                     moveToNext(route)
                 }
                 is UiState.Error -> {

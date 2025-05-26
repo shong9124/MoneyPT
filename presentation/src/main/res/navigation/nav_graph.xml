@@ -45,8 +45,8 @@
         app:route="question"
         tools:layout="@layout/fragment_question" >
         <action
-            android:id="@+id/action_questionFragment_to_recommendFinancialItemFragment"
-            app:destination="@id/recommendFinancialItemFragment" />
+            android:id="@+id/action_questionFragment_to_questionResultFragment"
+            app:destination="@id/questionResultFragment" />
     </fragment>
     <fragment
         android:id="@+id/recommendFinancialItemFragment"
@@ -134,4 +134,13 @@
         android:label="fragment_recommend_card_list_result"
         tools:layout="@layout/fragment_recommend_card_list_result"
         app:route="recommend_card_result"/>
+    <fragment
+        android:id="@+id/questionResultFragment"
+        android:name="com.capstone.presentation.view.signIn.QuestionResultFragment"
+        android:label="QuestionResultFragment"
+        app:route="question_result">
+        <action
+            android:id="@+id/action_questionResultFragment_to_recommendFinancialItemFragment"
+            app:destination="@id/recommendFinancialItemFragment" />
+    </fragment>
 </navigation>
